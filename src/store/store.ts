@@ -1,8 +1,12 @@
-import { configureStore } from "@reduxjs/toolkit";
-
+import { configureStore } from "@reduxjs/toolkit"
+import authReducer from "@/entities/slices/auth/auth" 
 
 export const store = configureStore({
-    reducer:{
-        
-    }
+  reducer: {
+    auth: authReducer,
+  },
 })
+
+// Типы для использования в хуках
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
