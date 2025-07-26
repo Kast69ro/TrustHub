@@ -160,7 +160,7 @@ export default function LoginPage() {
           </form>
 
           <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-            Don`t have an account?{" "}
+           Don&apos;t have an account?{" "}
             <Link href="/registration" className="text-black font-bold hover:underline">
               Create one here
             </Link>
