@@ -5,7 +5,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Logo } from "../logo/logo";
 import Button from "@mui/material/Button";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { Bars3Icon, XMarkIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -17,16 +19,41 @@ const navItems = [
 
 export function Navigation() {
   const pathname = usePathname();
-  const router = useRouter()
+  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const token = localStorage.getItem("trust_token");
-  useEffect(() => {
-    setIsAuthenticated(!!token);
-  }, [token]);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
 
-  if (!isAuthenticated) return null;
+  const [token,setToken] = useState(null)
+
+  useEffect(() => {
+  const storedToken = localStorage.getItem("trust_token");
+  setIsAuthenticated(!!storedToken);
+}, [isAuthenticated]);
+
+
+  const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("trust_token");
+    setIsAuthenticated(false);
+    handleMenuClose();
+    router.push("/login");
+  };
+
+  const handleProfile = () => {
+    router.push("/profile");
+    handleMenuClose();
+  };
 
   return (
     <nav className="backdrop-blur bg-white/60 border-b border-[#d7c4a3] sticky top-0 z-50">
@@ -51,28 +78,62 @@ export function Navigation() {
                 {item.label}
               </Link>
             ))}
-            <Button
-              variant="outlined"
-              size="small"
-              sx={{
-                borderColor: "#d7c4a3",
-                color: "#000000",
-                backgroundColor: "transparent",
-                textTransform: "none",
-                fontWeight: "500",
-                "&:hover": {
-                  backgroundColor: "#D7C4A3",
-                  borderColor: "#D7C4A3",
-                },
-              }}
-              onClick={() => {
-                localStorage.removeItem("trust_token");
-                setIsAuthenticated(false);
-                router.push('/login')
-              }}
-            >
-              Logout
-            </Button>
+
+            {isAuthenticated ? (
+              <>
+                <Button
+                  aria-controls={openMenu ? "profile-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={openMenu ? "true" : undefined}
+                  onClick={handleProfileClick}
+                  sx={{
+                    minWidth: "auto",
+                    padding: 0,
+                    color: "#000000",
+                    "&:hover": { backgroundColor: "rgba(215, 196, 163, 0.3)" },
+                  }}
+                >
+                  <UserCircleIcon className="h-8 w-8" />
+                </Button>
+
+                <Menu
+                  id="profile-menu"
+                  anchorEl={anchorEl}
+                  open={openMenu}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                >
+                  <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <Button
+                variant="outlined"
+                size="small"
+                sx={{
+                  borderColor: "#d7c4a3",
+                  color: "#000000",
+                  backgroundColor: "transparent",
+                  textTransform: "none",
+                  fontWeight: "500",
+                  "&:hover": {
+                    backgroundColor: "#D7C4A3",
+                    borderColor: "#D7C4A3",
+                  },
+                }}
+                onClick={() => router.push("/login")}
+              >
+                Login
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -117,30 +178,72 @@ export function Navigation() {
                   {item.label}
                 </Link>
               ))}
-              <Button
-                variant="outlined"
-                size="small"
-                sx={{
-                  borderColor: "#D7C4A3",
-                  color: "#000000",
-                  backgroundColor: "transparent",
-                  textTransform: "none",
-                  fontWeight: "500",
-                  width: "fit-content",
-                  "&:hover": {
-                    backgroundColor: "#D7C4A3",
+
+              {isAuthenticated ? (
+                <>
+                  <Button
+                    variant="text"
+                    startIcon={<UserCircleIcon className="h-6 w-6" />}
+                    sx={{
+                      justifyContent: "flex-start",
+                      color: "#000000",
+                      textTransform: "none",
+                      fontWeight: "500",
+                    }}
+                    onClick={() => {
+                      router.push("/profile");
+                      setIsOpen(false);
+                    }}
+                  >
+                    Profile
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                      borderColor: "#D7C4A3",
+                      color: "#000000",
+                      backgroundColor: "transparent",
+                      textTransform: "none",
+                      fontWeight: "500",
+                      width: "fit-content",
+                      "&:hover": {
+                        backgroundColor: "#D7C4A3",
+                        borderColor: "#D7C4A3",
+                      },
+                    }}
+                    onClick={() => {
+                      handleLogout();
+                      setIsOpen(false);
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{
                     borderColor: "#D7C4A3",
-                  },
-                }}
-                onClick={() => {
-                  localStorage.removeItem("trust_token");
-                  setIsAuthenticated(false);
-                  setIsOpen(false);
-                  // редирект при необходимости
-                }}
-              >
-                Logout
-              </Button>
+                    color: "#000000",
+                    backgroundColor: "transparent",
+                    textTransform: "none",
+                    fontWeight: "500",
+                    width: "fit-content",
+                    "&:hover": {
+                      backgroundColor: "#D7C4A3",
+                      borderColor: "#D7C4A3",
+                    },
+                  }}
+                  onClick={() => {
+                    router.push("/login");
+                    setIsOpen(false);
+                  }}
+                >
+                  Login
+                </Button>
+              )}
             </div>
           </div>
         )}

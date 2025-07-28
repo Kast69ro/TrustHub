@@ -50,7 +50,9 @@ export default function LoginPage() {
       setIsLoading(true)
        await dispatch(loginUser(formData)).unwrap()
       toast.success("Login successful!")
-      router.replace('/')
+   window.location.href = '/'
+
+
     } catch (err: any) {
       toast.error(err.message || "Login failed")
     } finally {
