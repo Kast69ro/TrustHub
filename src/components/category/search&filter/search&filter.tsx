@@ -57,7 +57,7 @@ export default function CatalogPage() {
 
   useEffect(() => {
     dispatch(getCatalog());
-  }, []);
+  }, [dispatch]);
   const handleMoreClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };

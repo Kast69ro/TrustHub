@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import {
   Box,
@@ -18,16 +17,12 @@ import { Logo } from "@/components/shared/logo/logo";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/components/shared/hooks/app-dispatch/app-dispatch";
 import { loginUser } from "@/entities/api/login/login";
-import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
 
-  const router = useRouter();
-
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -47,15 +42,14 @@ export default function LoginPage() {
     }
 
     try {
-      setIsLoading(true);
       await dispatch(loginUser(formData)).unwrap();
       toast.success("Login successful!");
       window.location.href = "/";
-    } catch (err) {
+    } catch (err: unknown) {
       if (typeof err === "string") {
         toast.error(err);
       } else if (err && typeof err === "object" && "message" in err) {
-        toast.error((err as any).message);
+        toast.error((err as { message: string }).message);
       } else {
         toast.error("Login failed");
       }
@@ -156,7 +150,6 @@ export default function LoginPage() {
                 height: 48,
                 "&:hover": { bgcolor: "#c2ae91" },
               }}
-              disabled={isLoading}
             >
               Sign In
             </Button>

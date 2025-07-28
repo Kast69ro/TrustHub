@@ -27,7 +27,6 @@ export function Navigation() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
 
-  const [token,setToken] = useState(null)
 
   useEffect(() => {
   const storedToken = localStorage.getItem("trust_token");

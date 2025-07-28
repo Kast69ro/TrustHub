@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -11,52 +11,52 @@ import {
   InputAdornment,
   IconButton,
   Box,
-} from "@mui/material"
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline"
-import Link from "next/link"
-import { Logo } from "@/components/shared/logo/logo"
-import { toast } from "sonner"
-import { useAppDispatch } from "@/components/shared/hooks/app-dispatch/app-dispatch"
-import { registerUser } from "@/entities/api/registration/registration"
-import { useRouter } from "next/navigation"
+} from "@mui/material";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { Logo } from "@/components/shared/logo/logo";
+import { toast } from "sonner";
+import { useAppDispatch } from "@/components/shared/hooks/app-dispatch/app-dispatch";
+import { registerUser } from "@/entities/api/registration/registration";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     confirmPassword: "",
-  })
+  });
 
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const validateEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  }
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!validateEmail(formData.email)) {
-      toast.error("Please enter a valid email")
-      return
+      toast.error("Please enter a valid email");
+      return;
     }
 
     if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters")
-      return
+      toast.error("Password must be at least 6 characters");
+      return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match")
-      return
+      toast.error("Passwords do not match");
+      return;
     }
 
     try {
@@ -65,21 +65,26 @@ export default function RegisterPage() {
           email: formData.email,
           password: formData.password,
         })
-      ).unwrap()
+      ).unwrap();
 
-      toast.success("Account created successfully!")
-      setFormData({ email: "", password: "", confirmPassword: "" })
-      router.push("/login")
-    } catch (err: any) {
+      toast.success("Account created successfully!");
+      setFormData({ email: "", password: "", confirmPassword: "" });
+      router.push("/login");
+    } catch (err: unknown) {
       if (typeof err === "string") {
-        toast.error(err)
-      } else if (err && typeof err === "object" && "message" in err) {
-        toast.error(err.message)
+        toast.error(err);
+      } else if (
+        err &&
+        typeof err === "object" &&
+        "message" in err &&
+        typeof (err as any).message === "string"
+      ) {
+        toast.error((err as any).message);
       } else {
-        toast.error("Registration failed")
+        toast.error("Registration failed");
       }
     }
-  }
+  };
 
   return (
     <Box
@@ -210,12 +215,15 @@ export default function RegisterPage() {
 
           <Typography variant="body2" align="center" sx={{ mt: 3 }}>
             Already have an account?{" "}
-            <Link href="/login" className="text-black font-bold hover:underline">
+            <Link
+              href="/login"
+              className="text-black font-bold hover:underline"
+            >
               Sign in here
             </Link>
           </Typography>
         </CardContent>
       </Card>
     </Box>
-  )
+  );
 }
