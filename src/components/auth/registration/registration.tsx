@@ -77,9 +77,9 @@ export default function RegisterPage() {
         err &&
         typeof err === "object" &&
         "message" in err &&
-        typeof (err as any).message === "string"
+        typeof (err as { message?: unknown }).message === "string"
       ) {
-        toast.error((err as any).message);
+        toast.error((err as { message: string }).message);
       } else {
         toast.error("Registration failed");
       }
