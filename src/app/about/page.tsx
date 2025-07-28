@@ -10,7 +10,6 @@ export default function AboutPage() {
   return (
     <div className="bg-[#f1eadb] min-h-screen py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="font-serif text-5xl font-bold text-trusthub-black mb-6">About TrustHub</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -100,7 +99,7 @@ export default function AboutPage() {
               </p>
               <p className="leading-relaxed">
                 Today, TrustHub serves thousands of professionals, students, and creators who value quality over quantity.
-                We're proud to be the trusted source for discovering the tools and services that truly make a difference.
+                We&apos;re proud to be the trusted source for discovering the tools and services that truly make a difference.
               </p>
             </div>
           </CardContent>

@@ -18,9 +18,11 @@ import { Logo } from "@/components/shared/logo/logo"
 import { toast } from "sonner"
 import { useAppDispatch } from "@/components/shared/hooks/app-dispatch/app-dispatch"
 import { registerUser } from "@/entities/api/registration/registration"
+import { useRouter } from "next/navigation"
 
 export default function RegisterPage() {
   const dispatch = useAppDispatch()
+  const router = useRouter()
 
   const [formData, setFormData] = useState({
     email: "",
@@ -35,8 +37,22 @@ export default function RegisterPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!validateEmail(formData.email)) {
+      toast.error("Please enter a valid email")
+      return
+    }
+
+    if (formData.password.length < 6) {
+      toast.error("Password must be at least 6 characters")
+      return
+    }
 
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match")
@@ -49,11 +65,19 @@ export default function RegisterPage() {
           email: formData.email,
           password: formData.password,
         })
-      )
+      ).unwrap()
+
       toast.success("Account created successfully!")
       setFormData({ email: "", password: "", confirmPassword: "" })
+      router.push("/login")
     } catch (err: any) {
-      toast.error("Registration failed")
+      if (typeof err === "string") {
+        toast.error(err)
+      } else if (err && typeof err === "object" && "message" in err) {
+        toast.error(err.message)
+      } else {
+        toast.error("Registration failed")
+      }
     }
   }
 
@@ -70,7 +94,6 @@ export default function RegisterPage() {
         px: 4,
       }}
     >
-      {/* Логотип и приветствие */}
       <Box
         sx={{
           mb: 6,

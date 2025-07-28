@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -11,54 +11,56 @@ import {
   Typography,
   IconButton,
   InputAdornment,
-} from "@mui/material"
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline"
-import Link from "next/link"
-import { Logo } from "@/components/shared/logo/logo"
-import { toast } from "sonner"
-import { useAppDispatch } from "@/components/shared/hooks/app-dispatch/app-dispatch"
-import { loginUser } from "@/entities/api/login/login" 
-import { useRouter } from "next/navigation"
+} from "@mui/material";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { Logo } from "@/components/shared/logo/logo";
+import { toast } from "sonner";
+import { useAppDispatch } from "@/components/shared/hooks/app-dispatch/app-dispatch";
+import { loginUser } from "@/entities/api/login/login";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const [formData, setFormData] = useState({ email: "", password: "" })
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!formData.email || !formData.password) {
-      toast.error("Please fill in all fields")
-      return
+      toast.error("Please fill in all fields");
+      return;
     }
 
     if (!formData.email.includes("@")) {
-      toast.error("Please enter a valid email")
-      return
+      toast.error("Please enter a valid email");
+      return;
     }
 
     try {
-      setIsLoading(true)
-       await dispatch(loginUser(formData)).unwrap()
-      toast.success("Login successful!")
-   window.location.href = '/'
-
-
-    } catch (err: any) {
-      toast.error(err.message || "Login failed")
-    } finally {
-      setIsLoading(false)
+      setIsLoading(true);
+      await dispatch(loginUser(formData)).unwrap();
+      toast.success("Login successful!");
+      window.location.href = "/";
+    } catch (err) {
+      if (typeof err === "string") {
+        toast.error(err);
+      } else if (err && typeof err === "object" && "message" in err) {
+        toast.error((err as any).message);
+      } else {
+        toast.error("Login failed");
+      }
     }
-  }
+  };
 
   return (
     <Box
@@ -142,7 +144,6 @@ export default function LoginPage() {
               }}
             />
 
-
             <Button
               type="submit"
               fullWidth
@@ -157,18 +158,21 @@ export default function LoginPage() {
               }}
               disabled={isLoading}
             >
-            Sign In
+              Sign In
             </Button>
           </form>
 
           <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-           Don&apos;t have an account?{" "}
-            <Link href="/registration" className="text-black font-bold hover:underline">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/registration"
+              className="text-black font-bold hover:underline"
+            >
               Create one here
             </Link>
           </Typography>
         </CardContent>
       </Card>
     </Box>
-  )
+  );
 }
