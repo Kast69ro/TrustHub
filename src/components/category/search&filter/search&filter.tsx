@@ -49,15 +49,18 @@ export default function CatalogPage() {
   const open = Boolean(anchorEl);
 
   const resources = useAppSelector((state) => state.catalog.catalog);
-  console.log(resources);
-  
-  
-
   const dispatch = useAppDispatch();
 
+  // Загружаем каталог при изменении фильтров
   useEffect(() => {
-    dispatch(getCatalog());
-  }, [dispatch]);
+    dispatch(
+      getCatalog({
+        category: selectedCategory === "All" ? undefined : selectedCategory,
+        searchTerm: searchTerm || undefined,
+      })
+    );
+  }, [dispatch, selectedCategory, searchTerm]);
+
   const handleMoreClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -65,22 +68,12 @@ export default function CatalogPage() {
     setAnchorEl(null);
   };
 
-  const filteredResources = resources.filter((resource) => {
-    const matchesSearch =
-      resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      resource.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "All" || resource.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
-
   const visibleCategories =
     categories.length > 5 ? categories.slice(0, 5) : categories;
 
   return (
     <Box sx={{ bgcolor: "#f6f1e7", minHeight: "100vh", py: 8 }}>
       <Box maxWidth="xl" mx="auto" px={{ xs: 2, sm: 4, md: 8 }}>
-        {/* Header */}
         <Box mb={6}>
           <Typography
             variant="h3"
@@ -96,7 +89,6 @@ export default function CatalogPage() {
           </Typography>
         </Box>
 
-        {/* Search & Filter */}
         <Box
           bgcolor="white"
           borderRadius={2}
@@ -107,7 +99,6 @@ export default function CatalogPage() {
           flexDirection="column"
           gap={2}
         >
-          {/* Поиск */}
           <TextField
             fullWidth
             variant="outlined"
@@ -126,7 +117,6 @@ export default function CatalogPage() {
             }}
           />
 
-          {/* Категории */}
           <Stack direction="row" spacing={1} flexWrap="wrap">
             {visibleCategories.map((category) => (
               <Button
@@ -176,12 +166,10 @@ export default function CatalogPage() {
           </Stack>
         </Box>
 
-        {/* Results Count */}
         <Typography color="text.secondary" mb={3}>
-          Showing {filteredResources.length} resources
+          Showing {resources.length} resources
         </Typography>
 
-        {/* Resource Grid */}
         <Box
           display="grid"
           gridTemplateColumns={{
@@ -191,7 +179,7 @@ export default function CatalogPage() {
           }}
           gap={3}
         >
-          {filteredResources.map((resource) => (
+          {resources.map((resource) => (
             <Card
               key={resource.id}
               variant="outlined"
@@ -200,11 +188,14 @@ export default function CatalogPage() {
                 boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
                 border: "1px solid #f1eadb",
                 transition: "transform 0.2s ease",
+                display: "flex",
+                flexDirection: "column",
                 "&:hover": {
                   transform: "translateY(-4px)",
                   boxShadow: "0 6px 30px rgba(0,0,0,0.08)",
                 },
                 background: "#fffdf8",
+                height: "100%", // чтобы растянуть по высоте сетки
               }}
             >
               <CardHeader
@@ -276,7 +267,14 @@ export default function CatalogPage() {
                 sx={{ pb: 0 }}
               />
 
-              <CardContent sx={{ pt: 1 }}>
+              <CardContent
+                sx={{
+                  pt: 1,
+                  flexGrow: 1, // чтобы растянуть и занять пространство
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
                 <Typography
                   variant="body2"
                   color="text.secondary"
@@ -287,11 +285,11 @@ export default function CatalogPage() {
                     textOverflow: "unset",
                     display: "block",
                     maxHeight: "none",
+                    flexGrow: 1, // чтобы текст занял всё доступное место
                   }}
                 >
                   {resource.description}
                 </Typography>
-
 
                 <Stack direction="row" spacing={1} flexWrap="wrap" mb={2}>
                   {resource.tags.map((tag) => (
@@ -309,33 +307,37 @@ export default function CatalogPage() {
                   ))}
                 </Stack>
 
-                <Button
-                  variant="contained"
-                  fullWidth
-                  onClick={() => window.open(resource.url, "_blank")}
-                  sx={{
-                    textTransform: "none",
-                    borderRadius: 2,
-                    bgcolor: "#1a1a1a",
-                    color: "#fff",
-                    "&:hover": {
-                      bgcolor: "#333",
-                    },
-                  }}
-                  endIcon={
-                    <ArrowTopRightOnSquareIcon
-                      style={{ width: 18, height: 18 }}
-                    />
-                  }
-                >
-                  Visit Resource
-                </Button>
+                <Box mt="auto">
+                  {" "}
+                  {/* Отступ сверху — чтобы кнопка прижалась к низу */}
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    onClick={() => window.open(resource.url, "_blank")}
+                    sx={{
+                      textTransform: "none",
+                      borderRadius: 2,
+                      bgcolor: "#1a1a1a",
+                      color: "#fff",
+                      "&:hover": {
+                        bgcolor: "#333",
+                      },
+                    }}
+                    endIcon={
+                      <ArrowTopRightOnSquareIcon
+                        style={{ width: 18, height: 18 }}
+                      />
+                    }
+                  >
+                    Visit Resource
+                  </Button>
+                </Box>
               </CardContent>
             </Card>
           ))}
         </Box>
 
-        {filteredResources.length === 0 && (
+        {resources.length === 0 && (
           <Box textAlign="center" py={6}>
             <Typography color="text.secondary" variant="h6" mb={2}>
               No resources found matching your criteria.

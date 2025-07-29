@@ -2,8 +2,8 @@
 export default function ChatPage() {
   return (
     <div>
-        <h1>chat</h1>
-      
+    {/* <ChatPage/>       */}
+    <h1>s</h1>
     </div>
   )
 }
