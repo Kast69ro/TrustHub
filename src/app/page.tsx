@@ -2,8 +2,6 @@ import { Button } from "@mui/material";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { FeaturesSection } from "@/components/home/features/features";
 import { CategoriesSection } from "@/components/home/category/category";
-import header from "@/assets/header.png";
-import Image from "next/image";
 import { IconCloud } from "@/components/magicui/icon-cloud";
 import { AnimatedBeamDemo } from "@/components/home/beam/beam";
 const slugs = [

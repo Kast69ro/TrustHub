@@ -29,33 +29,28 @@ export default function Contact() {
     message: "",
   })
 
-  const [loading, setLoading] = useState(false)
-  const [successMessage, setSuccessMessage] = useState("")
-  const [errorMessage, setErrorMessage] = useState("")
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
- const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-  try {
-    const res = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+      const result = await res.json();
 
-    const result = await res.json();
-
-    if (res.ok) {
-      toast.success("Сообщение успешно отправлено!");
-      setFormData({ name: "", email: "", subject: "", message: "" });
-    } else {
-      toast.error("Ошибка: " + (result.error || "Неизвестная ошибка"));
+      if (res.ok) {
+        toast.success("Сообщение успешно отправлено!");
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        toast.error("Ошибка: " + (result.error || "Неизвестная ошибка"));
+      }
+    } catch (error) {
+      toast.error("Неожиданная ошибка");
     }
-  } catch (error) {
-    toast.error("Неожиданная ошибка");
-  }
-};
-
+  };
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -71,7 +66,6 @@ export default function Contact() {
       }}
     >
       <Box maxWidth="1200px" mx="auto">
-        {/* Header */}
         <Box textAlign="center" mb={10}>
           <Typography
             variant="h3"
@@ -89,7 +83,7 @@ export default function Contact() {
             maxWidth={600}
             mx="auto"
           >
-            Have questions, suggestions, or want to collaborate? We'd love to
+            Have questions, suggestions, or want to collaborate? We&apos;d love to
             hear from you.
           </Typography>
         </Box>
@@ -99,7 +93,6 @@ export default function Contact() {
           spacing={6}
           alignItems="flex-start"
         >
-          {/* Contact Information */}
           <Stack spacing={4} flex={1}>
             {[{
               icon: (
@@ -208,7 +201,7 @@ export default function Contact() {
                       fullWidth
                       id="subject"
                       label="Subject"
-                      placeholder="What's this about?"
+                      placeholder="What&apos;s this about?"
                       value={formData.subject}
                       onChange={(e) => handleInputChange("subject", e.target.value)}
                       size="medium"
@@ -231,7 +224,6 @@ export default function Contact() {
                       type="submit"
                       fullWidth
                       variant="contained"
-                      disabled={loading}
                       sx={{
                         mt: 2,
                         bgcolor: "#1a1a1a",
@@ -240,19 +232,8 @@ export default function Contact() {
                       }}
                       endIcon={<PaperAirplaneIcon style={{ width: 20, height: 20 }} />}
                     >
-                      {loading ? "Sending..." : "Send Message"}
+                      Send Message
                     </Button>
-
-                    {successMessage && (
-                      <Typography color="success.main" mt={2}>
-                        {successMessage}
-                      </Typography>
-                    )}
-                    {errorMessage && (
-                      <Typography color="error.main" mt={2}>
-                        {errorMessage}
-                      </Typography>
-                    )}
                   </Stack>
                 </Box>
               </CardContent>
@@ -260,7 +241,6 @@ export default function Contact() {
           </Stack>
         </Stack>
 
-        {/* FAQ Section */}
         <Box mt={12}>
           <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
             <CardHeader
