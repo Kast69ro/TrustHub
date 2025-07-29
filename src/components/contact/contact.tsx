@@ -65,7 +65,7 @@ export default function Contact() {
             Get in Touch
           </Typography>
           <Typography variant="body1" color="text.secondary" maxWidth={600} mx="auto">
-            Have questions, suggestions, or want to collaborate? We'd love to hear from you.
+            Have questions, suggestions, or want to collaborate? We&apos;d love to hear from you.
           </Typography>
         </Box>
 

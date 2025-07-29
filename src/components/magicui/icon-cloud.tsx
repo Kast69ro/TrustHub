@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, useMemo, useCallback } from "react"
 import { renderToString } from "react-dom/server"
 
 interface Icon {
@@ -38,16 +38,21 @@ export function IconCloud({ icons, images }: IconCloudProps) {
   }>(null)
 
   const rotationRef = useRef({ x: 0, y: 0 })
-  const animationFrameRef = useRef<number | undefined>(undefined);
+  const animationFrameRef = useRef<number | undefined>(undefined)
   const iconCanvasesRef = useRef<HTMLCanvasElement[]>([])
   const imagesLoadedRef = useRef<boolean[]>([])
 
-  const items = icons || images || []
-  const useIcons = !!icons
+  // Мемоизируем items и useIcons, чтобы не пересоздавать на каждом рендере
+  const items = useMemo(() => icons || images || [], [icons, images])
+  const useIcons = useMemo(() => !!icons, [icons])
 
-  // Генерация позиций
+  // Генерация позиций иконок
   useEffect(() => {
     const numIcons = items.length
+    if (numIcons === 0) {
+      setIconPositions([])
+      return
+    }
     const offset = 2 / numIcons
     const increment = Math.PI * (3 - Math.sqrt(5))
 
@@ -66,8 +71,13 @@ export function IconCloud({ icons, images }: IconCloudProps) {
     setIconPositions(positions)
   }, [items])
 
-  // Генерация offscreen-канвасов
+  // Генерация offscreen canvas для каждого icon/image
   useEffect(() => {
+    if (items.length === 0) {
+      iconCanvasesRef.current = []
+      imagesLoadedRef.current = []
+      return
+    }
     const newCanvases: HTMLCanvasElement[] = []
     imagesLoadedRef.current = items.map(() => false)
 
@@ -77,11 +87,13 @@ export function IconCloud({ icons, images }: IconCloudProps) {
         canvas.width = 40
         canvas.height = 40
         const ctx = canvas.getContext("2d")
-
-        if (!ctx) return resolve()
+        if (!ctx) {
+          resolve()
+          return
+        }
 
         if (!useIcons) {
-          // Image
+          // Обрабатываем картинки
           const img = new Image()
           img.crossOrigin = "anonymous"
           img.src = item as string
@@ -94,8 +106,9 @@ export function IconCloud({ icons, images }: IconCloudProps) {
             imagesLoadedRef.current[i] = true
             resolve()
           }
+          img.onerror = () => resolve() // На случай ошибки загрузки
         } else {
-          // SVG
+          // Обрабатываем SVG
           let svg = renderToString(item as React.ReactElement)
           if (!svg.includes("xmlns")) {
             svg = svg.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"')
@@ -110,6 +123,7 @@ export function IconCloud({ icons, images }: IconCloudProps) {
             imagesLoadedRef.current[i] = true
             resolve()
           }
+          img.onerror = () => resolve()
         }
 
         newCanvases[i] = canvas
@@ -119,15 +133,15 @@ export function IconCloud({ icons, images }: IconCloudProps) {
     Promise.all(loadPromises).then(() => {
       iconCanvasesRef.current = newCanvases
     })
-  }, [icons, images])
+  }, [items, useIcons])
 
-  // Обработка мыши
-  const handleMouseDown = (e: React.MouseEvent) => {
+  // Обработчики мыши
+  const handleMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     setIsDragging(true)
     setLastMousePos({ x: e.clientX, y: e.clientY })
-  }
+  }, [])
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     const rect = canvasRef.current?.getBoundingClientRect()
     if (!rect) return
 
@@ -142,9 +156,11 @@ export function IconCloud({ icons, images }: IconCloudProps) {
       rotationRef.current.y += dx * 0.002
       setLastMousePos({ x: e.clientX, y: e.clientY })
     }
-  }
+  }, [isDragging, lastMousePos])
 
-  const handleMouseUp = () => setIsDragging(false)
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false)
+  }, [])
 
   // Анимация
   useEffect(() => {
@@ -204,7 +220,11 @@ export function IconCloud({ icons, images }: IconCloudProps) {
     }
 
     animate()
-    return () => cancelAnimationFrame(animationFrameRef.current!)
+    return () => {
+      if (animationFrameRef.current !== undefined) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
   }, [iconPositions, targetRotation, mousePos, isDragging])
 
   return (
