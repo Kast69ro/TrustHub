@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../styles/globals.css";
+import "../../styles/globals.css";
 import { ReduxProvider } from "@/components/providers/redux/redux";
 import { Navigation } from "@/components/shared/navigation/navigation";
 import { Toaster } from "sonner";
+
+import { NextIntlClientProvider } from "next-intl";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,9 +26,7 @@ export const metadata: Metadata = {
       { url: "/logo.png", type: "image/png", sizes: "64x64" },
       { url: "/logo.png", type: "image/png", sizes: "192x192" },
     ],
-    apple: [
-      { url: "/logo.png", sizes: "180x180" },
-    ],
+    apple: [{ url: "/logo.png", sizes: "180x180" }],
   },
   openGraph: {
     title: "TrustHub – Discover Trusted Resources",
@@ -50,22 +50,27 @@ export const metadata: Metadata = {
     description: "Verified tools and platforms curated by experts.",
     images: ["/logo.png"],
   },
-}
+};
 
-
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
+  params,
+}: {
   children: React.ReactNode;
-}>) {
+  params: { locale: string };
+}) {
+  // Загрузим переводы для текущего языка
+  const messages = (await import(`../../../message/${params.locale}.json`)).default;
+
   return (
-    <html lang="en">
+    <html lang={params.locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Navigation/>
+        <Navigation />
         <ReduxProvider>
+          <NextIntlClientProvider locale={params.locale} messages={messages}>
             {children}
-             <Toaster position="bottom-right" richColors />
+            <Toaster position="bottom-right" richColors />
+          </NextIntlClientProvider>
         </ReduxProvider>
       </body>
     </html>

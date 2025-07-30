@@ -65,7 +65,7 @@ export function IconCloud({ icons, images }: IconCloudProps) {
       const x = Math.cos(phi) * r
       const z = Math.sin(phi) * r
 
-      positions.push({ x: x * 100, y: y * 100, z: z * 100, scale: 1, opacity: 1, id: i })
+      positions.push({ x: x * 150, y: y * 150, z: z * 150, scale: 1, opacity: 1, id: i })
     }
 
     setIconPositions(positions)
@@ -84,8 +84,8 @@ export function IconCloud({ icons, images }: IconCloudProps) {
     const loadPromises = items.map((item, i) => {
       return new Promise<void>((resolve) => {
         const canvas = document.createElement("canvas")
-        canvas.width = 40
-        canvas.height = 40
+        canvas.width = 60
+        canvas.height = 60
         const ctx = canvas.getContext("2d")
         if (!ctx) {
           resolve()
@@ -100,9 +100,9 @@ export function IconCloud({ icons, images }: IconCloudProps) {
           img.onload = () => {
             ctx.clearRect(0, 0, 40, 40)
             ctx.beginPath()
-            ctx.arc(20, 20, 20, 0, 2 * Math.PI)
+            ctx.arc(30, 30, 30, 0, 2 * Math.PI)
             ctx.clip()
-            ctx.drawImage(img, 0, 0, 40, 40)
+            ctx.drawImage(img, 0, 0, 60, 60)
             imagesLoadedRef.current[i] = true
             resolve()
           }
@@ -176,7 +176,7 @@ export function IconCloud({ icons, images }: IconCloudProps) {
       const dy = mousePos.y - centerY
       const maxDist = Math.sqrt(centerX ** 2 + centerY ** 2)
       const dist = Math.sqrt(dx ** 2 + dy ** 2)
-      const speed = 0.003 + (dist / maxDist) * 0.01
+      const speed = 0.005 + (dist / maxDist) * 0.01
 
       if (targetRotation) {
         const elapsed = performance.now() - targetRotation.startTime
@@ -210,7 +210,7 @@ export function IconCloud({ icons, images }: IconCloudProps) {
 
         const buffer = iconCanvasesRef.current[i]
         if (buffer && imagesLoadedRef.current[i]) {
-          ctx.drawImage(buffer, -20, -20, 40, 40)
+          ctx.drawImage(buffer, -40, -40, 60, 60)
         }
 
         ctx.restore()
@@ -236,7 +236,6 @@ export function IconCloud({ icons, images }: IconCloudProps) {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
-      className="rounded-lg"
       aria-label="3D Icon Cloud"
     />
   )

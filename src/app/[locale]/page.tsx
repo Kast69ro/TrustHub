@@ -3,7 +3,9 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { FeaturesSection } from "@/components/home/features/features";
 import { CategoriesSection } from "@/components/home/category/category";
 import { IconCloud } from "@/components/magicui/icon-cloud";
-import { AnimatedBeamDemo } from "@/components/home/beam/beam";
+import { AnimatedBeamDemo } from "@/components/magicui/animated-beam";
+import {getTranslations} from 'next-intl/server'
+import Orbit from "@/components/home/orbit/orbit";
 const slugs = [
   "typescript",
   "javascript",
@@ -15,26 +17,32 @@ const slugs = [
   'YouTube',
   'visa',
   'paypal',
-  'mastercard'
+  'mastercard',
+  "/omuz.png",
+  'NestJS',
+  'Redux',
+  'reactrouter',
+  'firebase',
+  'republicofgamers'
 ];
-export default function HomePage() {
+export default async function HomePage() {
   const images = slugs.map((slug) => {
   if (slug.startsWith("http") || slug.startsWith("/")) return slug;
   return `https://cdn.simpleicons.org/${slug}/${slug}`;
 });
 
+const t = await getTranslations('HomePage');
   return (
     <div className="bg-[#f1eadb] min-h-screen">
-      <section className="py-5 px-4 sm:px-6 lg:px-8 border-b border-[#d7c4a3] max-w-7xl mx-auto flex flex-col md:flex-row  justify-center md:items-center gap-10">
-        <div className="w-full  flex flex-col items-center md:items-start md:mt-15">
-          <h1 className="font-serif text-5xl md:text-6xl font-bold text-black mb-6 leading-tight text-center md:text-left">
-            Discover Trusted Resources
+      <section className="py-5 px-4 sm:px-6 lg:px-8 border-b border-[#d7c4a3] max-w-7xl mx-auto flex flex-col md:flex-row  justify-center md:items-center ">
+        <div className="w-full  flex flex-col items-center md:items-start py-10">
+          <h1 className="font-serif text-5xl md:text-[60px] font-[600] text-black leading-normal   text-center md:text-left">
+            {t('title')}
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-xl leading-relaxed text-center md:text-left">
-            Your curated directory of verified tools, services, and platforms.
-            Find exactly what you need with confidence and ease.
+           {t('about')}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start items-center">
+          <div className="flex flex-col sm:flex-row  justify-center md:justify-start items-center">
             <Button
               variant="contained"
               size="large"
@@ -50,11 +58,11 @@ export default function HomePage() {
               }}
             >
               <MagnifyingGlassIcon className="h-5 w-5 text-white" />
-              Explore Catalog
+              {t('button_1')}
             </Button>
           </div>
         </div>
-          <div className="  w-full flex justify-center">
+          <div className="flex items-center justify-center">
             <IconCloud images={images} />
           </div>
 
@@ -65,15 +73,21 @@ export default function HomePage() {
 
       <CategoriesSection />
 
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="bg-white">
       <AnimatedBeamDemo/>
+      </section>
+
+      <section>
+        <Orbit/>
+      </section>
+
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="font-serif text-3xl font-bold text-black mb-4">
-            Ready to Get Started?
+            {t('get-start-section-title')}
           </h2>
           <p className="text-xl text-gray-600 mb-8">
-            Join thousands of professionals who trust TrustHub for their
-            resource discovery.
+            {t('get-start-section-about')}
           </p>
           <Button
             variant="contained"
@@ -88,10 +102,12 @@ export default function HomePage() {
               },
             }}
           >
-            Start Exploring
+             {t('get-start-section-button')}
           </Button>
         </div>
       </section>
+
+      
     </div>
   );
 }

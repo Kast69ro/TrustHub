@@ -28,7 +28,7 @@ import {
   useAppSelector,
 } from "@/components/shared/hooks/app-dispatch/app-dispatch";
 import { getCatalog } from "@/entities/api/catalog/catalog";
-
+import { grey } from '@mui/material/colors';
 const categories = [
   "All",
   "Design",
@@ -124,15 +124,18 @@ export default function CatalogPage() {
                 variant={
                   selectedCategory === category ? "contained" : "outlined"
                 }
-                color={selectedCategory === category ? "primary" : "inherit"}
                 onClick={() => setSelectedCategory(category)}
                 sx={{
                   textTransform: "none",
                   borderColor: "#d7c4a3",
                   color: selectedCategory === category ? "white" : "#1a1a1a",
+                  backgroundColor:
+                    selectedCategory === category ? grey[800] : "transparent",
                   "&:hover": {
                     bgcolor:
-                      selectedCategory === category ? "#5a5a5a" : "#f1eadb",
+                      selectedCategory === category ? grey[900] : "#f1eadb",
+                    borderColor:
+                      selectedCategory === category ? grey[900] : "#d7c4a3",
                   },
                 }}
               >
@@ -195,7 +198,7 @@ export default function CatalogPage() {
                   boxShadow: "0 6px 30px rgba(0,0,0,0.08)",
                 },
                 background: "#fffdf8",
-                height: "100%", // чтобы растянуть по высоте сетки
+                height: "100%",
               }}
             >
               <CardHeader
@@ -270,7 +273,7 @@ export default function CatalogPage() {
               <CardContent
                 sx={{
                   pt: 1,
-                  flexGrow: 1, // чтобы растянуть и занять пространство
+                  flexGrow: 1,
                   display: "flex",
                   flexDirection: "column",
                 }}
@@ -285,7 +288,7 @@ export default function CatalogPage() {
                     textOverflow: "unset",
                     display: "block",
                     maxHeight: "none",
-                    flexGrow: 1, // чтобы текст занял всё доступное место
+                    flexGrow: 1,
                   }}
                 >
                   {resource.description}
@@ -309,7 +312,6 @@ export default function CatalogPage() {
 
                 <Box mt="auto">
                   {" "}
-                  {/* Отступ сверху — чтобы кнопка прижалась к низу */}
                   <Button
                     variant="contained"
                     fullWidth
@@ -329,7 +331,7 @@ export default function CatalogPage() {
                       />
                     }
                   >
-                    Visit Resource
+                    Visit Web site
                   </Button>
                 </Box>
               </CardContent>

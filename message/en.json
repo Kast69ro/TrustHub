@@ -1,0 +1,32 @@
+{
+  "HomePage": {
+    "title": "Discover Trusted Resources",
+    "about": "Your curated directory of verified tools, services, and platforms. Find exactly what you need with confidence and ease.",
+    "button_1": "Explore Catalog",
+    "section-2-title": "Why Choose TrustHub?",
+    "section-2-about": "Every resource is carefully vetted and verified by our community of experts",
+    "cart-1-title": "Verified Quality",
+    "cart-2-title": "Community Rated",
+    "cart-3-title": "Always Updated",
+    "cart-1-about": "All resources are thoroughly reviewed and verified by our team.",
+    "cart-2-about": "Real ratings and reviews from our trusted community members.",
+    "cart-3-about": "Fresh content and regular updates to keep resources current.",
+    "category-section-title":"Browse by Category",
+    "category-section-about":"Explore our carefully organized collection of resources.",
+    "category-1":"Development Tools",
+    "category-2":"Design Resources",
+    "category-3":"Learning Platforms",
+    "category-4":"Productivity Apps",
+    "category-5":"Community Tools",
+    "category-6":"Security Services",
+    "resource":"resources",
+    "ad-title":"Join Our Trusted Network",
+    "ad-about":"Become part of a carefully curated community of verified websites and trusted resources. Help us build a safer, more reliable internet where quality and authenticity matter.",
+    "ad-button":"Add Your Site",
+    "get-start-section-title":"Ready to Get Started?",
+    "get-start-section-about":"Join thousands of professionals who trust TrustHub for their resource discovery.",
+    "get-start-section-button":"START EXPLORING"
+
+
+  }
+}
