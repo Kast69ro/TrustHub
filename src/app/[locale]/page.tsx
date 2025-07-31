@@ -7,23 +7,27 @@ import { AnimatedBeamDemo } from "@/components/magicui/animated-beam";
 import {getTranslations} from 'next-intl/server'
 import Orbit from "@/components/home/orbit/orbit";
 const slugs = [
-  "typescript",
-  "javascript",
-  "react",
-  "Next.js",
+  "freecodecamp",
+  "theodinproject",
+  "frontendmentor",
+  "figma",
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsKSu72K8l9K5TlK7U3B5bYsrsg0xYw-9g8g&s',
   'https://play-lh.googleusercontent.com/GguSSKNcZdGw624xa9VqH71Sy6B12bHdlINY0RN_CltpzE51NgdFWkxesZuI4joVDrM',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-ffvle8jxcJgU4Wd0Uj1rsdVy6bWG3hcx6A&s',
   'YouTube',
-  'visa',
-  'paypal',
-  'mastercard',
+  'interactiondesignfoundation',
+  '/tasty.jpg',
+  'https://play-lh.googleusercontent.com/iWVlhTceVZosZNyVRYRwJb4JKw7j_ifg3zJDLkhFoLt3yudFo1nwAFSUtKRvJDIu7w',
   "/omuz.png",
-  'NestJS',
-  'Redux',
-  'reactrouter',
-  'firebase',
-  'republicofgamers'
+  'tryhackme',
+  'hackthebox',
+  'codewars',
+  'exercism',
+  'linuxfoundation',
+  'dribbble',
+  'soundcloud',
+  'tailwindcss',
+  'w3schools'
 ];
 export default async function HomePage() {
   const images = slugs.map((slug) => {

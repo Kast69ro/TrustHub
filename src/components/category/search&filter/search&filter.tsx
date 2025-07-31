@@ -28,7 +28,7 @@ import {
   useAppSelector,
 } from "@/components/shared/hooks/app-dispatch/app-dispatch";
 import { getCatalog } from "@/entities/api/catalog/catalog";
-import { grey } from '@mui/material/colors';
+import { grey } from "@mui/material/colors";
 const categories = [
   "All",
   "Design",
@@ -50,8 +50,9 @@ export default function CatalogPage() {
 
   const resources = useAppSelector((state) => state.catalog.catalog);
   const dispatch = useAppDispatch();
+  console.log(resources);
+  
 
-  // Загружаем каталог при изменении фильтров
   useEffect(() => {
     dispatch(
       getCatalog({
@@ -106,11 +107,24 @@ export default function CatalogPage() {
             placeholder="Search resources..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#ccc", 
+                },
+                "&:hover fieldset": {
+                  borderColor: "#bba77c", 
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#d7c4a3", 
+                },
+              },
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <MagnifyingGlassIcon
-                    style={{ width: 20, height: 20, color: "#9ca3af" }}
+                    style={{ width: 20, height: 20, color: "#000" }}
                   />
                 </InputAdornment>
               ),

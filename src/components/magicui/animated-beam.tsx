@@ -1,10 +1,12 @@
 "use client"
+
 import type React from "react"
 import { forwardRef, useRef, useState, useEffect, useId } from "react"
 import { cn } from "@/lib/utils"
 import {
   AcademicCapIcon,
   ChatBubbleBottomCenterTextIcon,
+  FolderIcon,
   GlobeAltIcon,
   InboxStackIcon,
   ShieldCheckIcon,
@@ -13,21 +15,6 @@ import {
 import Image from "next/image"
 import logo from "@/assets/logo.png"
 import { motion } from "framer-motion"
-
-// Responsive icon styles
-const getIconBaseStyle = (size: "sm" | "md" | "lg" = "md") => {
-  const sizes = {
-    sm: { width: 20, height: 20 },
-    md: { width: 28, height: 28 },
-    lg: { width: 32, height: 32 },
-  }
-  return {
-    ...sizes[size],
-    strokeWidth: 1.5,
-    stroke: "currentColor",
-    style: { verticalAlign: "middle" },
-  }
-}
 
 type CircleProps = {
   className?: string
@@ -131,6 +118,7 @@ function AnimatedBeam({
 
         const startX = rectA.left - containerRect.left + rectA.width / 2 + startXOffset
         const startY = rectA.top - containerRect.top + rectA.height / 2 + startYOffset
+
         const endX = rectB.left - containerRect.left + rectB.width / 2 + endXOffset
         const endY = rectB.top - containerRect.top + rectB.height / 2 + endYOffset
 
@@ -174,8 +162,10 @@ function AnimatedBeam({
     >
       {/* Static path for the base stroke */}
       <path d={pathD} stroke={pathColor} strokeWidth={pathWidth} strokeOpacity={pathOpacity} strokeLinecap="round" />
+
       {/* Animated path for the gradient */}
       <path d={pathD} strokeWidth={pathWidth} stroke={`url(#${id})`} strokeOpacity="1" strokeLinecap="round" />
+
       <defs>
         <motion.linearGradient
           className="transform-gpu"
@@ -222,62 +212,76 @@ export function AnimatedBeamDemo() {
   const div7Ref = useRef<HTMLDivElement | null>(null)
 
   return (
-    <div className="w-full py-8 sm:py-12 lg:py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="w-full py-8 sm:py-12 ">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 ">
         {/* Main Container - Responsive height and padding */}
         <div
-          className="relative flex items-center justify-center overflow-hidden
-                     h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[550px]
-                     p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12"
+          className="relative flex items-center justify-center overflow-hidden  h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[600px] p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12"
           ref={containerRef}
         >
-          <div
-            className="flex size-full flex-col items-stretch justify-between
-                       gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12"
-          >
+          <div className="flex size-full flex-col items-stretch justify-between gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12">
             {/* Top Row - Responsive spacing */}
-            <div
-              className="flex flex-row items-center justify-between
-                         px-2 sm:px-4 md:px-6 lg:px-8"
-            >
-              <Circle ref={div1Ref} size="md">
-                <Icons.googleDrive />
-              </Circle>
-              <Circle ref={div5Ref} size="md">
-                <Icons.googleDocs />
-              </Circle>
+            <div className="flex flex-row items-center justify-between  px-2 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex flex-col items-center">
+                <Circle ref={div1Ref} size="md">
+                  <Icons.googleDrive.component />
+                </Circle>
+                <p className="mt-2 text-center text-gray-600 text-xs sm:text-sm md:text-base">
+                  {Icons.googleDrive.label}
+                </p>
+              </div>
+              <div className="flex flex-col items-center">
+                <Circle ref={div5Ref} size="md">
+                  <Icons.googleDocs.component />
+                </Circle>
+                <p className="mt-2 text-center text-gray-600 text-xs sm:text-sm md:text-base">
+                  {Icons.googleDocs.label}
+                </p>
+              </div>
             </div>
             {/* Middle Row - Center circle with responsive sizing */}
-            <div
-              className="flex flex-row items-center justify-between
-                         px-1 sm:px-2 md:px-4 lg:px-6"
-            >
-              <Circle ref={div2Ref} size="md">
-                <Icons.notion />
-              </Circle>
+            <div className="flex flex-row items-center justify-between  px-1 sm:px-2 md:px-4 lg:px-6">
+              <div className="flex flex-col items-center">
+                <Circle ref={div2Ref} size="md">
+                  <Icons.notion.component />
+                </Circle>
+                <p className="mt-2 text-center text-gray-600 text-xs sm:text-sm md:text-base">{Icons.notion.label}</p>
+              </div>
               {/* Central Circle - Responsive sizing */}
-              <Circle ref={div4Ref} size="xl" className="relative">
-                <Icons.openai />
-                {/* Subtle glow effect for center */}
-                <div className="absolute inset-0 rounded-full opacity-40 animate-pulse -z-10"></div>
-              </Circle>
-              <Circle ref={div6Ref} size="md">
-                <Icons.zapier />
-              </Circle>
+              <div className="flex flex-col items-center relative">
+                <Circle ref={div4Ref} size="xl" className="relative">
+                  <Icons.openai.component />
+                  {/* Subtle glow effect for center */}
+                  <div className="absolute inset-0 rounded-full opacity-40 animate-pulse -z-10"></div>
+                </Circle>
+                <p className="mt-2 text-center text-gray-600 text-xs sm:text-sm md:text-base">{Icons.openai.label}</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <Circle ref={div6Ref} size="md">
+                  <Icons.zapier.component />
+                </Circle>
+                <p className="mt-2 text-center text-gray-600 text-xs sm:text-sm md:text-base">{Icons.zapier.label}</p>
+              </div>
             </div>
             {/* Bottom Row */}
-            <div
-              className="flex flex-row items-center justify-between
-                         px-2 sm:px-4 md:px-6 lg:px-8"
-            >
-              <Circle ref={div3Ref} size="md">
-                <Icons.whatsapp />
-              </Circle>
-              <Circle ref={div7Ref} size="md">
-                <Icons.messenger />
-              </Circle>
+            <div className="flex flex-row items-center justify-between  px-2 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex flex-col items-center">
+                <Circle ref={div3Ref} size="md">
+                  <Icons.whatsapp.component />
+                </Circle>
+                <p className="mt-2 text-center text-gray-600 text-xs sm:text-sm md:text-base">{Icons.whatsapp.label}</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <Circle ref={div7Ref} size="md">
+                  <Icons.messenger.component />
+                </Circle>
+                <p className="mt-2 text-center text-gray-600 text-xs sm:text-sm md:text-base">
+                  {Icons.messenger.label}
+                </p>
+              </div>
             </div>
           </div>
+
           {/* Animated Beams - All connections to center */}
           <AnimatedBeam
             containerRef={containerRef}
@@ -311,28 +315,45 @@ export function AnimatedBeamDemo() {
   )
 }
 
-// Responsive Icons with dynamic sizing
 const Icons = {
-  notion: () => (
-    <InboxStackIcon
-      {...getIconBaseStyle("md")}
-      className="text-gray-700 hover:text-orange-500 transition-colors w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8"
-    />
-  ),
-  openai: () => <Image src={logo || "/placeholder.svg"} alt="OpenAI logo" width={100} height={100} />,
-  googleDrive: () => (
-    <ChatBubbleBottomCenterTextIcon className="text-green-600 hover:text-green-800 transition-colors w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8" />
-  ),
-  whatsapp: () => (
-    <SparklesIcon className="text-yellow-500 hover:text-yellow-600 transition-colors w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8" />
-  ),
-  googleDocs: () => (
-    <ShieldCheckIcon className="text-blue-600 hover:text-blue-800 transition-colors w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8" />
-  ),
-  zapier: () => (
-    <AcademicCapIcon className="text-indigo-600 hover:text-indigo-800 transition-colors w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8" />
-  ),
-  messenger: () => (
-    <GlobeAltIcon className="text-cyan-600 hover:text-cyan-800 transition-colors w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8" />
-  ),
+  notion: {
+    component: () => (
+      <InboxStackIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-gray-700 hover:text-orange-500 transition-colors" />
+    ),
+    label: "Knowledge Base",
+  },
+  openai: {
+    component: () => <Image src={logo || "/placeholder.svg"} alt="OpenAI logo" width={100} height={100} />,
+    label: "TrustHub",
+  },
+  googleDrive: {
+    component: () => (
+      <FolderIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-green-600 hover:text-green-800 transition-colors" />
+    ),
+    label: "File Storage",
+  },
+  whatsapp: {
+    component: () => (
+      <SparklesIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-yellow-500 hover:text-yellow-600 transition-colors" />
+    ),
+    label: "Community",
+  },
+  googleDocs: {
+    component: () => (
+      <ShieldCheckIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-blue-600 hover:text-blue-800 transition-colors" />
+    ),
+    label: "Verified Content",
+  },
+  zapier: {
+    component: () => (
+      <AcademicCapIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-indigo-600 hover:text-indigo-800 transition-colors" />
+    ),
+    label: "Education",
+  },
+  messenger: {
+    component: () => (
+      <GlobeAltIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-cyan-600 hover:text-cyan-800 transition-colors" />
+    ),
+    label: "Multilingual",
+  },
 }

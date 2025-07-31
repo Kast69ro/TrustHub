@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID!; // Например: "-4873016422" (строкой)
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID!;
 
 export async function POST(request: NextRequest) {
   try {

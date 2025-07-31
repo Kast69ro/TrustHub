@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "@/config/firebase/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where,addDoc } from "firebase/firestore";
 
 export interface Resource {
   id: string;                
@@ -45,3 +45,32 @@ export const getCatalog = createAsyncThunk<Resource[], CatalogFilters | undefine
     return resources;
   }
 );
+
+
+
+export interface ResourceToAdd {
+  category: string;
+  description: string;
+  fullDescription: string;
+  isOfficial: boolean;
+  tags: string[];
+  title: string;
+  trustLevel: number;
+  url: string;
+  trusted?: boolean | "unknown";
+}
+
+export async function saveResourceIfTrusted(resource: ResourceToAdd) {
+  if (resource.trusted === true && resource.trustLevel >= 4) {
+    try {
+      const colRef = collection(db, "resources");
+      await addDoc(colRef, resource);
+      console.log("✅ Ресурс успешно добавлен");
+    } catch (error) {
+      console.error("❌ Ошибка при добавлении ресурса:", error);
+    }
+  } else {
+    console.log("⛔️ Ресурс не добавлен: уровень доверия недостаточный или не trusted");
+  }
+}
+

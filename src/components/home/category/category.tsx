@@ -75,7 +75,7 @@ export async function CategoriesSection() {
                         {category.name}
                       </h3>
                       <p className="text-base text-gray-500">
-                        {category.count} resources
+                        {category.count} {t('resource')}
                       </p>
                     </div>
                   </div>

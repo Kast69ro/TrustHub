@@ -17,6 +17,13 @@ const navItems = [
   { href: "/chat", label: "AI Assistant" },
 ];
 
+// Поддерживаемые языки
+const locales = [
+  { code: "en", label: "English" },
+  { code: "ru", label: "Русский" },
+  { code: "tj", label: "Тоҷикӣ" },
+];
+
 export function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
@@ -24,22 +31,25 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const openMenu = Boolean(anchorEl);
+  // Меню профиля
+  const [anchorElProfile, setAnchorElProfile] = useState<null | HTMLElement>(null);
+  const openProfileMenu = Boolean(anchorElProfile);
 
+  // Меню языков
+  const [anchorElLang, setAnchorElLang] = useState<null | HTMLElement>(null);
+  const openLangMenu = Boolean(anchorElLang);
 
   useEffect(() => {
-  const storedToken = localStorage.getItem("trust_token");
-  setIsAuthenticated(!!storedToken);
-}, [isAuthenticated]);
-
+    const storedToken = localStorage.getItem("trust_token");
+    setIsAuthenticated(!!storedToken);
+  }, []);
 
   const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorElProfile(event.currentTarget);
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    setAnchorElProfile(null);
   };
 
   const handleLogout = () => {
@@ -53,6 +63,35 @@ export function Navigation() {
     router.push("/profile");
     handleMenuClose();
   };
+
+  // Языковое меню
+  const handleLangClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElLang(event.currentTarget);
+  };
+
+  const handleLangClose = () => {
+    setAnchorElLang(null);
+  };
+
+  const handleChangeLocale = (localeCode: string) => {
+    setAnchorElLang(null);
+    // Перейти на страницу с выбранным языком
+    // Предполагается, что у вас маршруты с локалями: /en, /ru, /tj и т.д.
+    const segments = pathname.split("/");
+    if (locales.some((l) => l.code === segments[1])) {
+      segments[1] = localeCode; // заменить текущий locale
+    } else {
+      segments.splice(1, 0, localeCode); // добавить locale
+    }
+    const newPathname = segments.join("/") || "/";
+    router.push(newPathname);
+  };
+
+  // Определим текущий язык из URL (примерно)
+  const currentLocale = (() => {
+    const segments = pathname.split("/");
+    return locales.find((l) => l.code === segments[1])?.code || "en";
+  })();
 
   return (
     <nav className="backdrop-blur bg-white/60 border-b border-[#d7c4a3] sticky top-0 z-50">
@@ -81,9 +120,9 @@ export function Navigation() {
             {isAuthenticated ? (
               <>
                 <Button
-                  aria-controls={openMenu ? "profile-menu" : undefined}
+                  aria-controls={openProfileMenu ? "profile-menu" : undefined}
                   aria-haspopup="true"
-                  aria-expanded={openMenu ? "true" : undefined}
+                  aria-expanded={openProfileMenu ? "true" : undefined}
                   onClick={handleProfileClick}
                   sx={{
                     minWidth: "auto",
@@ -97,8 +136,8 @@ export function Navigation() {
 
                 <Menu
                   id="profile-menu"
-                  anchorEl={anchorEl}
-                  open={openMenu}
+                  anchorEl={anchorElProfile}
+                  open={openProfileMenu}
                   onClose={handleMenuClose}
                   anchorOrigin={{
                     vertical: "bottom",
@@ -133,6 +172,57 @@ export function Navigation() {
                 Login
               </Button>
             )}
+
+            {/* Language selector */}
+            <div>
+              <Button
+                aria-controls={openLangMenu ? "lang-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={openLangMenu ? "true" : undefined}
+                onClick={handleLangClick}
+                sx={{
+                  minWidth: "auto",
+                  padding: "1px 12px",
+                  color: "#000000",
+                  textTransform: "none",
+                  fontWeight: "500",
+                  borderColor: "#d7c4a3",
+                  border: "1px solid",
+                  backgroundColor: "transparent",
+                  marginLeft: "8px",
+                  "&:hover": {
+                    backgroundColor: "#D7C4A3",
+                    borderColor: "#D7C4A3",
+                  },
+                }}
+              >
+                {locales.find((l) => l.code === currentLocale)?.label || "EN"}
+              </Button>
+              <Menu
+                id="lang-menu"
+                anchorEl={anchorElLang}
+                open={openLangMenu}
+                onClose={handleLangClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                {locales.map(({ code, label }) => (
+                  <MenuItem
+                    key={code}
+                    selected={code === currentLocale}
+                    onClick={() => handleChangeLocale(code)}
+                  >
+                    {label}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </div>
           </div>
 
           {/* Mobile menu button */}
@@ -182,7 +272,6 @@ export function Navigation() {
                 <>
                   <Button
                     variant="text"
-                    startIcon={<UserCircleIcon className="h-6 w-6" />}
                     sx={{
                       justifyContent: "flex-start",
                       color: "#000000",
@@ -243,6 +332,56 @@ export function Navigation() {
                   Login
                 </Button>
               )}
+
+              {/* Mobile language selector */}
+              <Button
+                variant="outlined"
+                size="small"
+                sx={{
+                  borderColor: "#D7C4A3",
+                  color: "#000000",
+                  backgroundColor: "transparent",
+                  textTransform: "none",
+                  fontWeight: "500",
+                  width: "fit-content",
+                  marginTop: "8px",
+                  "&:hover": {
+                    backgroundColor: "#D7C4A3",
+                    borderColor: "#D7C4A3",
+                  },
+                }}
+                onClick={handleLangClick}
+              >
+                {locales.find((l) => l.code === currentLocale)?.label || "EN"}
+              </Button>
+
+              <Menu
+                id="lang-menu-mobile"
+                anchorEl={anchorElLang}
+                open={openLangMenu}
+                onClose={handleLangClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                {locales.map(({ code, label }) => (
+                  <MenuItem
+                    key={code}
+                    selected={code === currentLocale}
+                    onClick={() => {
+                      handleChangeLocale(code);
+                      setIsOpen(false);
+                    }}
+                  >
+                    {label}
+                  </MenuItem>
+                ))}
+              </Menu>
             </div>
           </div>
         )}
