@@ -15,7 +15,7 @@ import {
 
 import { toast } from "sonner";
 import { Logo } from "@/components/shared/logo/logo";
-import { queryGeminiAI, type AiResponse } from "@/app/api/add-form/route";
+import { queryGeminiAI, type AiResponse } from "@/entities/api/check-site/check";
 import axios from "axios";
 import { ResourceToAdd, saveResourceIfTrusted } from "@/entities/api/catalog/catalog";
 
