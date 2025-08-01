@@ -199,7 +199,7 @@ export function AnimatedBeamDemo() {
 
   const t = useTranslations("beam")
 
-  let labels = {
+  const labels = {
     notion: t("knowledge"),
     googleDrive: t("file"),
     whatsapp: t("community"),
