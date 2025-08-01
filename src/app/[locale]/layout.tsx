@@ -65,13 +65,13 @@ export default async function RootLayout({
   return (
     <html lang={params.locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <NextIntlClientProvider locale={params.locale} messages={messages}>
         <Navigation />
         <ReduxProvider>
-          <NextIntlClientProvider locale={params.locale} messages={messages}>
             {children}
             <Toaster position="bottom-right" richColors />
-          </NextIntlClientProvider>
         </ReduxProvider>
+          </NextIntlClientProvider>
       </body>
     </html>
   );

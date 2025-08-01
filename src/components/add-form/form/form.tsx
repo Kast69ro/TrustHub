@@ -18,6 +18,8 @@ import { Logo } from "@/components/shared/logo/logo";
 import { queryGeminiAI, type AiResponse } from "@/entities/api/check-site/check";
 import axios from "axios";
 import { ResourceToAdd, saveResourceIfTrusted } from "@/entities/api/catalog/catalog";
+import Image from "next/image";
+import foto from "@/assets/from-img.jpeg";
 
 export default function SubmissionPage() {
   const [formData, setFormData] = useState({
@@ -26,15 +28,11 @@ export default function SubmissionPage() {
     description: "",
     fullDescription: "",
   });
-  const [aiDecision, setAiDecision] = useState<
-    "Accepted" | "Rejected" | "Sent to Manual Review" | null
-  >(null);
+  const [aiDecision, setAiDecision] = useState<"Accepted" | "Rejected" | "Sent to Manual Review" | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -71,8 +69,6 @@ export default function SubmissionPage() {
         formData.fullDescription
       );
 
-      console.log("AI response:", aiResponse);
-
       if (aiResponse.trusted === true) {
         setAiDecision("Accepted");
         toast.success("AI approved this site!");
@@ -92,7 +88,6 @@ export default function SubmissionPage() {
         await saveResourceIfTrusted(fullResource);
         toast.success("Resource saved to Firebase!");
 
-        // Очищаем форму после успешного добавления
         setFormData({
           title: "",
           url: "",
@@ -125,16 +120,16 @@ export default function SubmissionPage() {
   };
 
   const inputStyles = {
-  "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#f1eadb", 
-  },
-  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#f1eadb",
-  },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "#bfae8f", 
-  },
-};
+    "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#f1eadb",
+    },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#f1eadb",
+    },
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: "#bfae8f",
+    },
+  };
 
   return (
     <Box
@@ -145,8 +140,8 @@ export default function SubmissionPage() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        py: 10,
-        px: 3,
+        py: 8,
+        px: 2,
       }}
     >
       <Box textAlign="center" mb={4}>
@@ -164,108 +159,141 @@ export default function SubmissionPage() {
         </Typography>
       </Box>
 
-      <Card sx={{ width: 500 }}>
-        <CardHeader
-          title="Submission Form"
-          subheader="All submissions will be reviewed by AI"
-          sx={{ textAlign: "center" }}
-        />
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              fullWidth
-              required
-              label="Website Title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              margin="normal"
-              sx={inputStyles}
-            />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 4,
+          alignItems: "stretch",
+          justifyContent: "center",
+          width: "100%",
+          maxWidth: 1100,
+        }}
+      >
+        {/* Форма */}
+        <Card sx={{ flex: 1, minWidth: 350 }}>
+          <CardHeader
+            title="Submission Form"
+            subheader="All submissions will be reviewed by AI"
+            sx={{ textAlign: "center" }}
+          />
+          <CardContent>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                required
+                label="Website Title"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                margin="normal"
+                sx={inputStyles}
+              />
 
-            <TextField
-              fullWidth
-              required
-              label="Website URL"
-              name="url"
-              value={formData.url}
-              onChange={handleChange}
-              type="url"
-              margin="normal"
-              sx={inputStyles}
-            />
+              <TextField
+                fullWidth
+                required
+                label="Website URL"
+                name="url"
+                value={formData.url}
+                onChange={handleChange}
+                type="url"
+                margin="normal"
+                sx={inputStyles}
+              />
 
-            <TextField
-              fullWidth
-              required
-              label="Description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              margin="normal"
-              multiline
-              rows={4}
-              sx={inputStyles}
-            />
+              <TextField
+                fullWidth
+                required
+                label="Description"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                margin="normal"
+                multiline
+                rows={4}
+                sx={inputStyles}
+              />
 
-            <TextField
-              fullWidth
-              required
-              label="Full Description"
-              name="fullDescription"
-              value={formData.fullDescription}
-              onChange={handleChange}
-              margin="normal"
-              multiline
-              rows={6}
-              sx={inputStyles}
-            />
+              <TextField
+                fullWidth
+                required
+                label="Full Description"
+                name="fullDescription"
+                value={formData.fullDescription}
+                onChange={handleChange}
+                margin="normal"
+                multiline
+                rows={6}
+                sx={inputStyles}
+              />
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              disabled={loading}
-              sx={{
-                mt: 3,
-                bgcolor: "#f1eadb",
-                color: "#000",
-                fontWeight: "bold",
-                height: 48,
-                "&:hover": { bgcolor: "#e5dbca" },
-              }}
-            >
-              {loading ? <CircularProgress size={24} /> : "Submit Website"}
-            </Button>
-          </form>
-
-          {error && (
-            <Typography color="error" textAlign="center" mt={2}>
-              {error}
-            </Typography>
-          )}
-
-          {aiDecision && (
-            <>
-              <Divider sx={{ my: 3 }} />
-              <Typography variant="subtitle1" textAlign="center" fontWeight={600}>
-                AI Decision:
-              </Typography>
-              <pre
-                style={{
-                  backgroundColor: "#eee",
-                  padding: 16,
-                  borderRadius: 8,
-                  whiteSpace: "pre-wrap",
-                  fontSize: 14,
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                disabled={loading}
+                sx={{
+                  mt: 3,
+                  bgcolor: "#f1eadb",
+                  color: "#000",
+                  fontWeight: "bold",
+                  height: 48,
+                  "&:hover": { bgcolor: "#e5dbca" },
                 }}
               >
-                {aiDecision}
-              </pre>
-            </>
-          )}
-        </CardContent>
-      </Card>
+                {loading ? <CircularProgress size={24} /> : "Submit Website"}
+              </Button>
+            </form>
+
+            {error && (
+              <Typography color="error" textAlign="center" mt={2}>
+                {error}
+              </Typography>
+            )}
+
+            {aiDecision && (
+              <>
+                <Divider sx={{ my: 3 }} />
+                <Typography variant="subtitle1" textAlign="center" fontWeight={600}>
+                  AI Decision:
+                </Typography>
+                <pre
+                  style={{
+                    backgroundColor: "#eee",
+                    padding: 16,
+                    borderRadius: 8,
+                    whiteSpace: "pre-wrap",
+                    fontSize: 14,
+                  }}
+                >
+                  {aiDecision}
+                </pre>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Изображение */}
+        <Box
+          sx={{
+            flex: 1,
+            position: "relative",
+            borderRadius: 2,
+            overflow: "hidden",
+            minHeight: { xs: 300, md: "100%" },
+          }}
+        >
+          <Image
+            src={foto}
+            alt="TrustHub Illustration"
+            fill
+            style={{ objectFit: "cover" }}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority
+          />
+        </Box>
+      </Box>
     </Box>
   );
 }

@@ -8,14 +8,9 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Bars3Icon, XMarkIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { useTranslations } from "next-intl";
 
-const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/catalog", label: "Catalog" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-  { href: "/chat", label: "AI Assistant" },
-];
+
 
 // Поддерживаемые языки
 const locales = [
@@ -27,6 +22,17 @@ const locales = [
 export function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
+
+  const t = useTranslations("navigation")
+
+
+  const navItems = [
+  { href: "/", label: t("home") },
+  { href: "/catalog", label: t("catalog") },
+  { href: "/about", label:t("about") },
+  { href: "/contact", label: t("contact") },
+  { href: "/chat", label: t("ai") },
+];
 
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -169,7 +175,7 @@ export function Navigation() {
                 }}
                 onClick={() => router.push("/login")}
               >
-                Login
+                {t("login")}
               </Button>
             )}
 

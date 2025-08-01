@@ -19,7 +19,7 @@ function cleanJsonString(text: string): string {
     .trim();
 }
 
-export async function queryGeminiAI(
+export async function   queryGeminiAI(
   title: string,
   description: string,
   fullDescription: string

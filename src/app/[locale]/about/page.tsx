@@ -1,129 +1,385 @@
-import { Card, CardContent } from "@mui/material"
+import Link from "next/link";
+import Image from "next/image";
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  Card,
+  CardContent,
+  CardHeader,
+} from "@mui/material";
 import {
   ShieldCheckIcon,
-  UsersIcon,
-  StarIcon,
-  BoltIcon,
-} from "@heroicons/react/24/solid"
+  SparklesIcon,
+  LightBulbIcon,
+} from "@heroicons/react/24/outline";
+import { ArrowRightIcon } from "@heroicons/react/24/solid";
+import foto from "@/assets/about.png";
+import { getTranslations } from "next-intl/server";
 
-export default function AboutPage() {
+export default async function AboutUsPage() {
+  const t = await getTranslations("about");
+
+  const black = "#000000";
+  const white = "#FFFFFF";
+  const beige = "#D7C4A3";
+  const bgColor = "#f1eadb";
+
+  const steps = [
+    {
+      title: t("section-4-card-1-title"),
+      description: t("section-4-card-1-about"),
+    },
+    {
+      title: t("section-4-card-2-title"),
+      description: t("section-4-card-2-about"),
+    },
+    {
+      title: t("section-4-card-3-title"),
+      description: t("section-4-card-3-about"),
+    },
+  ];
+
   return (
-    <div className="bg-[#f1eadb] min-h-screen py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h1 className="font-serif text-5xl font-bold text-trusthub-black mb-6">About TrustHub</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            We believe in the power of curated, trusted resources to accelerate learning, productivity, and innovation.
-            TrustHub is your reliable companion in discovering the tools and services that truly matter.
-          </p>
-        </div>
+    <Box
+      sx={{
+        minHeight: "100dvh",
+        background: bgColor,
+        color: black,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <Box component="main" sx={{ flex: 1 }}>
+        {/* Hero Section */}
+        <Box
+          component="section"
+          sx={{
+            py: { xs: 12, md: 24, lg: 32, xl: 48 },
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            position: "relative",
+            overflow: "hidden",
+            backgroundColor: bgColor,
+          }}
+        >
+          <Container
+            sx={{
+              position: "relative",
+              zIndex: 1,
+              px: { xs: 4, md: 6 },
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              <Typography
+                component="h1"
+                variant="h2"
+                fontWeight="bold"
+                sx={{
+                  textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                  fontSize: {
+                    xs: "2.25rem",
+                    sm: "3rem",
+                    md: "3.75rem",
+                    lg: "4.5rem",
+                  },
+                  letterSpacing: "-0.025em",
+                  color: black,
+                }}
+              >
+                {t("title")}
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  maxWidth: 800,
+                  color: black,
+                  fontWeight: 400,
+                  lineHeight: 1.6,
+                  mx: "auto",
+                }}
+              >
+                {t("about")}
+              </Typography>
+              <Link href="/contact">
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    mt: 3,
+                    px: 8,
+                    py: 1.5,
+                    borderRadius: "9999px",
+                    boxShadow: 4,
+                    bgcolor: beige,
+                    color: black,
+                    "&:hover": {
+                      bgcolor: black,
+                      color: white,
+                      boxShadow: 6,
+                    },
+                  }}
+                >
+                  {t("title-button")}
+                </Button>
+              </Link>
+            </Box>
+          </Container>
+        </Box>
 
-        <Card className="bg-white border-[1px] border-[#d7c4a3] rounded-lg shadow-sm p-8 mb-12">
-          <CardContent>
-            <h2 className="font-serif text-3xl font-bold text-trusthub-black mb-6 text-center">Our Mission</h2>
-            <p className="text-gray-600 text-lg leading-relaxed text-center max-w-3xl mx-auto">
-              In a world overflowing with digital tools and services, finding the right resources can be overwhelming.
-              TrustHub cuts through the noise by providing a carefully curated directory of verified, high-quality
-              resources that professionals and learners can trust.
-            </p>
-          </CardContent>
-        </Card>
+        {/* Who We Are Section */}
+        <Box
+          component="section"
+          sx={{ py: { xs: 12, md: 24, lg: 32 }, backgroundColor: white }}
+        >
+          <Container sx={{ px: { xs: 4, md: 6 } }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column-reverse", md: "row-reverse" },
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 6,
+              }}
+            >
+              {/* Text */}
+              <Box
+                sx={{
+                  flex: 1,
+                  maxWidth: { md: "50%" },
+                }}
+              >
+                <Typography
+                  variant="h4"
+                  fontWeight="bold"
+                  gutterBottom
+                  sx={{ color: black, mb: 2 }}
+                >
+                  {t("section-2-title")}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color={black}
+                  paragraph
+                  sx={{ lineHeight: 1.7, fontSize: { xs: 16, md: 18 } }}
+                >
+                  {t("section-2-about")}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color={black}
+                  paragraph
+                  sx={{ lineHeight: 1.7, fontSize: { xs: 16, md: 21 } }}
+                >
+                  {t("section-2-about-2")}
+                </Typography>
+              </Box>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-white border-[1px] border-[#d7c4a3] shadow-sm">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 bg-[#f1eadb] rounded-full flex items-center justify-center mx-auto mb-4">
-                <ShieldCheckIcon className="h-8 w-8 text-trusthub-black" />
-              </div>
-              <h3 className="font-serif text-xl font-bold text-trusthub-black mb-3">Trust & Verification</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Every resource undergoes thorough review and verification. We ensure that what you find here is
-                legitimate, functional, and valuable.
-              </p>
-            </CardContent>
-          </Card>
+              {/* Image */}
+              <Box
+                sx={{
+                  flex: 1,
+                  maxWidth: { md: "50%" },
+                  borderRadius: 3,
+                  overflow: "hidden",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+                  "& img": {
+                    width: "100%",
+                    height: "auto",
+                    transition: "transform 0.5s ease",
+                  },
+                  "&:hover img": {
+                    transform: "scale(1.03)",
+                  },
+                }}
+              >
+                <Image
+                  src={foto}
+                  alt="Who We Are"
+                  width={800}
+                  height={500}
+                  style={{ display: "block" }}
+                />
+              </Box>
+            </Box>
+          </Container>
+        </Box>
 
-          <Card className="bg-white border-[1px] border-[#d7c4a3] shadow-sm">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 bg-[#f1eadb] rounded-full flex items-center justify-center mx-auto mb-4">
-                <UsersIcon className="h-8 w-8 text-trusthub-black" />
-              </div>
-              <h3 className="font-serif text-xl font-bold text-trusthub-black mb-3">Community Driven</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Our community of professionals, developers, and creators contribute resources and provide honest reviews
-                to help others make informed decisions.
-              </p>
-            </CardContent>
-          </Card>
+        {/* Our Values */}
+        <Box
+          component="section"
+          sx={{ py: { xs: 12, md: 24, lg: 30 }, backgroundColor: bgColor }}
+        >
+          <Container sx={{ px: { xs: 4, md: 6 }, textAlign: "center" }}>
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              mb={6}
+              sx={{ color: black }}
+            >
+              {t("section-3-title")}
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 4,
+              }}
+            >
+              {[1, 2, 3].map((val, i) => {
+                const Icon =
+                  val === 1
+                    ? ShieldCheckIcon
+                    : val === 2
+                    ? SparklesIcon
+                    : LightBulbIcon;
+                return (
+                  <Card
+                    key={i}
+                    sx={{
+                      width: {
+                        xs: "100%",
+                        sm: "calc(50% - 16px)",
+                        lg: "calc(33.333% - 22px)",
+                      },
+                      p: 4,
+                      borderRadius: 3,
+                      boxShadow: 4,
+                      textAlign: "center",
+                      cursor: "default",
+                      "&:hover": { boxShadow: 6 },
+                    }}
+                  >
+                    <CardHeader
+                      title={
+                        <Icon
+                          style={{
+                            width: 48,
+                            height: 48,
+                            color: beige,
+                            marginBottom: 16,
+                            marginInline: "auto",
+                          }}
+                        />
+                      }
+                    />
+                    <CardContent>
+                      <Typography variant="h6" fontWeight="bold" gutterBottom>
+                        {t(`section-3-card-${val}-title`)}
+                      </Typography>
+                      <Typography variant="body2" color={black}>
+                        {t(`section-3-card-${val}-about`)}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </Box>
+          </Container>
+        </Box>
 
-          <Card className="bg-white shadow-sm border-[1px] border-[#d7c4a3]">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 bg-[#f1eadb] rounded-full flex items-center justify-center mx-auto mb-4">
-                <StarIcon className="h-8 w-8 text-trusthub-black" />
-              </div>
-              <h3 className="font-serif text-xl font-bold text-trusthub-black mb-3">Quality Over Quantity</h3>
-              <p className="text-gray-600 leading-relaxed">
-                We prioritize quality curation over comprehensive listings. Each resource is selected for its genuine
-                value and reliability.
-              </p>
-            </CardContent>
-          </Card>
+        {/* How We Check Resources */}
+        <Box
+          component="section"
+          sx={{
+            py: { xs: 12, md: 24, lg: 32 },
+            px: { xs: 4, md: 6 },
+            backgroundColor: white,
+          }}
+        >
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            textAlign="center"
+            mb={8}
+            sx={{ color: "black" }}
+          >
+            {t("section-4-title")}
+          </Typography>
 
-          <Card className="bg-white shadow-sm border-[1px] border-[#d7c4a3]">
-            <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 bg-[#f1eadb] rounded-full flex items-center justify-center mx-auto mb-4">
-                <BoltIcon className="h-8 w-8 text-trusthub-black" />
-              </div>
-              <h3 className="font-serif text-xl font-bold text-trusthub-black mb-3">Always Current</h3>
-              <p className="text-gray-600 leading-relaxed">
-                We continuously update our directory, removing outdated resources and adding new discoveries to keep our
-                collection fresh and relevant.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Card className="bg-white rounded-lg shadow-sm p-8 mb-12 border-[1px] border-[#d7c4a3]">
-          <CardContent>
-            <h2 className="font-serif text-3xl font-bold text-trusthub-black mb-6 text-center">Our Story</h2>
-            <div className="prose prose-lg max-w-none text-gray-600">
-              <p className="mb-6 leading-relaxed">
-                TrustHub was born from a simple frustration: spending countless hours researching tools and services, only
-                to find outdated information, biased reviews, or broken links. As professionals ourselves, we understood
-                the pain of decision paralysis when faced with endless options.
-              </p>
-              <p className="mb-6 leading-relaxed">
-                We started by creating our own curated list of trusted resources for our team. Soon, colleagues and
-                friends began asking for access to our collection. It became clear that there was a real need for a
-                reliable, community-driven resource directory.
-              </p>
-              <p className="leading-relaxed">
-                Today, TrustHub serves thousands of professionals, students, and creators who value quality over quantity.
-                We&apos;re proud to be the trusted source for discovering the tools and services that truly make a difference.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          <div>
-            <div className="text-3xl font-bold text-trusthub-black mb-2">500+</div>
-            <div className="text-gray-600">Verified Resources</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-trusthub-black mb-2">10K+</div>
-            <div className="text-gray-600">Community Members</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-trusthub-black mb-2">25+</div>
-            <div className="text-gray-600">Categories</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-trusthub-black mb-2">99%</div>
-            <div className="text-gray-600">Uptime</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 3,
+              flexWrap: "wrap",
+            }}
+          >
+            {steps.map((step, i) => (
+              <Box key={i} sx={{ display: "flex", alignItems: "center" }}>
+                <Box
+                  sx={{
+                    width: 400,
+                    backgroundColor: white,
+                    border: `1px solid ${bgColor}`,
+                    borderRadius: 3,
+                    p: 8,
+                    textAlign: "center",
+                    boxShadow: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 64,
+                      height: 64,
+                      mb: 2,
+                      borderRadius: "50%",
+                      bgcolor: beige,
+                      color: black,
+                      fontWeight: "bold",
+                      fontSize: "1.75rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      userSelect: "none",
+                    }}
+                  >
+                    {i + 1}
+                  </Box>
+                  <Typography
+                    variant="h6"
+                    fontWeight="bold"
+                    mb={1}
+                    sx={{ color: black }}
+                  >
+                    {step.title}
+                  </Typography>
+                  <Typography color={black} sx={{ fontSize: 14 }}>
+                    {step.description}
+                  </Typography>
+                </Box>
+                {i < steps.length - 1 && (
+                  <ArrowRightIcon
+                    style={{
+                      width: 40,
+                      height: 40,
+                      color: beige,
+                      marginLeft: 20,
+                      marginRight: 20,
+                      flexShrink: 0,
+                    }}
+                  />
+                )}
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
 }
