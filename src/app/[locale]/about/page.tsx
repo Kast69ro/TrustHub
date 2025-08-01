@@ -56,7 +56,7 @@ export default async function AboutUsPage() {
         <Box
           component="section"
           sx={{
-            py: { xs: 12, md: 24, lg: 32, xl: 48 },
+            py: { xs: 10, md: 17, lg: 20, xl: 25 },
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
