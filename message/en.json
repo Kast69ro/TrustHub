@@ -64,5 +64,12 @@
     "section-4-card-1-about":"Users or experts suggest new learning resources, tools, or services they find valuable.",
     "section-4-card-2-about":"Our team and community rigorously review each submission for quality, relevance, and trustworthiness.",
     "section-4-card-3-about":"Once verified, the resource is published on TrustHub, making it accessible to everyone."
+  },
+  "catalog":{
+    "title":"Resource Catalog",
+    "about":"Discover and explore our curated collection of trusted resources.",
+    "showing":"Showing",
+    "resource":"resources",
+    "search":"Search resources..."
   }
 }

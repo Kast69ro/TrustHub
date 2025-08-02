@@ -14,6 +14,7 @@ import {
   SparklesIcon,
   LightBulbIcon,
 } from "@heroicons/react/24/outline";
+import head from "@/assets/about-header.jpeg";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import foto from "@/assets/about.png";
 import { getTranslations } from "next-intl/server";
@@ -64,6 +65,10 @@ export default async function AboutUsPage() {
             position: "relative",
             overflow: "hidden",
             backgroundColor: bgColor,
+            backgroundImage: `linear-gradient(rgba(247, 243, 236, 0.7), rgba(247, 243, 236, 0.7)), url('/about-header.jpeg')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
           }}
         >
           <Container
@@ -125,7 +130,7 @@ export default async function AboutUsPage() {
                     color: black,
                     "&:hover": {
                       bgcolor: black,
-                      color: white,
+                      color: "white",
                       boxShadow: 6,
                     },
                   }}

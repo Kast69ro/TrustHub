@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import {
   Box,
   Button,
@@ -29,18 +29,21 @@ import {
 } from "@/components/shared/hooks/app-dispatch/app-dispatch";
 import { getCatalog } from "@/entities/api/catalog/catalog";
 import { grey } from "@mui/material/colors";
+import { useTranslations } from "next-intl";
 const categories = [
   "All",
   "Design",
   "Development",
-  "Productivity",
-  "Learning",
+  "Documentation",
+  "Education",
   "Security",
   "Marketing",
   "Business",
-  "Photography",
+  "Technology",
   "Video",
+  "Utilities"
 ];
+
 
 export default function CatalogPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -50,7 +53,8 @@ export default function CatalogPage() {
 
   const resources = useAppSelector((state) => state.catalog.catalog);
   const dispatch = useAppDispatch();
-  console.log(resources);
+
+  const t = useTranslations('catalog')
   
 
   useEffect(() => {
@@ -83,10 +87,10 @@ export default function CatalogPage() {
             color="#1a1a1a"
             mb={1}
           >
-            Resource Catalog
+            {t('title')}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Discover and explore our curated collection of trusted resources.
+            {t('about')}
           </Typography>
         </Box>
 
@@ -104,7 +108,7 @@ export default function CatalogPage() {
             fullWidth
             variant="outlined"
             size="small"
-            placeholder="Search resources..."
+            placeholder={t('search')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             sx={{
@@ -184,7 +188,7 @@ export default function CatalogPage() {
         </Box>
 
         <Typography color="text.secondary" mb={3}>
-          Showing {resources.length} resources
+          {t('showing')} {resources.length} {t('resource')}
         </Typography>
 
         <Box

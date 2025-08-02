@@ -19,7 +19,7 @@ import { queryGeminiAI, type AiResponse } from "@/entities/api/check-site/check"
 import axios from "axios";
 import { ResourceToAdd, saveResourceIfTrusted } from "@/entities/api/catalog/catalog";
 import Image from "next/image";
-import foto from "@/assets/from-img.jpeg";
+import foto from "@/assets/form-img (2).jpeg";
 
 export default function SubmissionPage() {
   const [formData, setFormData] = useState({
@@ -52,8 +52,8 @@ export default function SubmissionPage() {
       errors.push("Description must be at least 10 words.");
     }
 
-    if (countWords(formData.fullDescription) < 25) {
-      errors.push("Full description must be at least 25 words.");
+    if (countWords(formData.fullDescription) < 20) {
+      errors.push("Full description must be at least 20 words.");
     }
 
     if (errors.length > 0) {
@@ -102,10 +102,10 @@ export default function SubmissionPage() {
         toast("AI is unsure — sending to moderators");
 
         await axios.post("/api/contact", {
-          name: "AI Review",
-          email: "noreply@trusthub.com",
-          subject: `AI unsure about: ${formData.title}`,
-          message: `URL: ${formData.url}\n\nDescription:\n${formData.description}\n\nFull Description:\n${formData.fullDescription}`,
+          name: `AI unsure about ${formData.title} sie `,
+          email: `URL: ${formData.url}`,
+          subject: `Description:\n${formData.description}`,
+          message: `Full Description:\n${formData.fullDescription}`,
         });
 
         toast.success("Sent to Telegram moderation group");
@@ -281,7 +281,7 @@ export default function SubmissionPage() {
             position: "relative",
             borderRadius: 2,
             overflow: "hidden",
-            minHeight: { xs: 300, md: "100%" },
+            minHeight: { xs: 600, md: "100%" },
           }}
         >
           <Image
