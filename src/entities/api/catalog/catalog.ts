@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "@/config/firebase/firebase";
-import { collection, getDocs, query, where,addDoc } from "firebase/firestore";
+import { collection, getDocs, query, where,addDoc,doc, getDoc } from "firebase/firestore";
 
 export interface Resource {
   id: string;                
@@ -73,4 +73,26 @@ export async function saveResourceIfTrusted(resource: ResourceToAdd) {
     console.log("⛔️ Ресурс не добавлен: уровень доверия недостаточный или не trusted");
   }
 }
+
+
+export const getCatalogById = createAsyncThunk<Resource | null, string>(
+  "catalog/fetchResourceById",
+  async (id: string) => {
+    try {
+      const docRef = doc(db, "resources", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        return { id: docSnap.id, ...docSnap.data() } as Resource;
+      } else {
+        console.warn("Resource not found");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching resource:", error);
+      return null;
+    }
+  }
+);
+
 

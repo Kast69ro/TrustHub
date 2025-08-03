@@ -30,6 +30,7 @@ import {
 import { getCatalog } from "@/entities/api/catalog/catalog";
 import { grey } from "@mui/material/colors";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 const categories = [
   "All",
   "Design",
@@ -201,6 +202,8 @@ export default function CatalogPage() {
           gap={3}
         >
           {resources.map((resource) => (
+            <Link key={resource.id} href={`/catalog/${resource.id}`}>
+            
             <Card
               key={resource.id}
               variant="outlined"
@@ -354,6 +357,7 @@ export default function CatalogPage() {
                 </Box>
               </CardContent>
             </Card>
+             </Link> 
           ))}
         </Box>
 
