@@ -29,7 +29,6 @@ interface ResourceDetailPageProps {
 export default function ResourceDetailPage({ id }: ResourceDetailPageProps) {
   const resource = useAppSelector((state) => state.catalog.catalogById);
   const dispatch = useAppDispatch();
-  console.log(resource);
   
 
   useEffect(() => {
@@ -77,7 +76,6 @@ export default function ResourceDetailPage({ id }: ResourceDetailPageProps) {
               )}
             </Box>
 
-            {/* Категория и рейтинг */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 3, mb: 3 }}>
               <Chip
                 label={resource.category}
@@ -103,7 +101,6 @@ export default function ResourceDetailPage({ id }: ResourceDetailPageProps) {
               </Box>
             </Box>
 
-            {/* Краткое описание */}
             <Typography
               variant="body1"
               sx={{ color: "#444", fontSize: "1.05rem", mb: 3 }}
@@ -111,7 +108,6 @@ export default function ResourceDetailPage({ id }: ResourceDetailPageProps) {
               {resource.description}
             </Typography>
 
-            {/* Полное описание */}
             <Typography
               variant="body1"
               sx={{ color: "#444", fontSize: "1rem", mb: 3 }}
@@ -119,7 +115,6 @@ export default function ResourceDetailPage({ id }: ResourceDetailPageProps) {
               {resource.fullDescription}
             </Typography>
 
-            {/* Теги */}
             <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 4 }}>
               {resource.tags.map((tag) => (
                   <Chip
@@ -135,7 +130,6 @@ export default function ResourceDetailPage({ id }: ResourceDetailPageProps) {
                 ))}
             </Stack>
 
-            {/* Кнопка перехода */}
             <Button
               variant="contained"
               component={Link}

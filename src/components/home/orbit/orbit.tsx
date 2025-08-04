@@ -87,9 +87,9 @@ export default function Orbit() {
               {trustedResources.map((resource, index) => {
                 const Icon = resource.icon;
                 const orbitSizes = {
-                  1: "w-64 h-64 lg:w-80 lg:h-80",
-                  2: "w-96 h-96 lg:w-[26rem] lg:h-[26rem]",
-                  3: "w-[28rem] h-[28rem] lg:w-[32rem] lg:h-[32rem]",
+                  1: "w-40 h-40 lg:w-70 lg:h-70",
+                  2: "w-60 h-60 lg:w-[20rem] lg:h-[20rem]",
+                  3: "w-70 h-70 lg:w-[30rem] lg:h-[30rem]",
                 };
                 const orbitSpeeds = {
                   1: "animate-gentle-orbit-1",
@@ -122,7 +122,7 @@ export default function Orbit() {
                         <div
                           className={`${resource.color} rounded-full p-4 lg:p-5 shadow-md border border-white/60 transition-all duration-300 hover:shadow-lg`}
                         >
-                          <Icon className="w-7 h-7 lg:w-8 lg:h-8" />
+                          <Icon className="w-7 h-7" />
                         </div>
                       </div>
                     </div>
@@ -161,13 +161,13 @@ export default function Orbit() {
         }
 
         .animate-gentle-orbit-1 {
-          animation: gentle-orbit-1 14s linear infinite;
+          animation: gentle-orbit-1 5s linear infinite;
         }
         .animate-gentle-orbit-2 {
-          animation: gentle-orbit-2 18s linear infinite;
+          animation: gentle-orbit-2 10s linear infinite;
         }
         .animate-gentle-orbit-3 {
-          animation: gentle-orbit-3 22s linear infinite;
+          animation: gentle-orbit-3 15s linear infinite;
         }
       `}</style>
     </section>

@@ -6,7 +6,6 @@ export default function ResourceById() {
   const params = useParams()
   const idParam = params.id
 
-  // Проверяем тип и берем только строку
   const resourceId = Array.isArray(idParam) ? idParam[0] : idParam
 
   if (!resourceId) {

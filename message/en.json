@@ -50,26 +50,97 @@
     "section-2-title": "Who We Are",
     "section-2-about": "At TrustHub, we are a passionate team dedicated to curating a reliable ecosystem for lifelong learners and professionals. Our mission is to cut through the noise of the internet, providing a meticulously vetted directory of educational content, productivity tools, and essential services. We aim to be the beacon of trust in a vast digital landscape, ensuring every resource listed meets our stringent quality and relevance standards.We believe that access to credible information is paramount for personal and professional development. By fostering a community-driven verification process, we empower users to make informed decisions and discover truly valuable resources.",
     "section-2-about-2": "We believe that access to credible information is paramountfor personal and professional development. By fostering acommunity-driven verification process, we empower users tomake informed decisions and discover truly valuable resources.",
-    "section-3-title":"Our Values",
-    "section-3-card-1-title":"Safety",
-    "section-3-card-2-title":"Transparency",
-    "section-3-card-3-title":"Usefulness",
-    "section-3-card-1-about":"We prioritize the security and reliability of every resource. Our rigorous verification process ensures that you can trust what you find on TrustHub.",
-    "section-3-card-2-about":"We believe in open and honest communication. Our review process is clear, and we provide all the information you need to make informed choices.",
-    "section-3-card-3-about":"Every resource on TrustHub is selected for its practical value and ability to genuinely help you learn, grow, or achieve your goals.",
+    "section-3-title": "Our Values",
+    "section-3-card-1-title": "Safety",
+    "section-3-card-2-title": "Transparency",
+    "section-3-card-3-title": "Usefulness",
+    "section-3-card-1-about": "We prioritize the security and reliability of every resource. Our rigorous verification process ensures that you can trust what you find on TrustHub.",
+    "section-3-card-2-about": "We believe in open and honest communication. Our review process is clear, and we provide all the information you need to make informed choices.",
+    "section-3-card-3-about": "Every resource on TrustHub is selected for its practical value and ability to genuinely help you learn, grow, or achieve your goals.",
     "section-4-title": "How We Check Resources",
-    "section-4-card-1-title":"Suggest",
-    "section-4-card-2-title":"Review",
-    "section-4-card-3-title":"Publish",
-    "section-4-card-1-about":"Users or experts suggest new learning resources, tools, or services they find valuable.",
-    "section-4-card-2-about":"Our team and community rigorously review each submission for quality, relevance, and trustworthiness.",
-    "section-4-card-3-about":"Once verified, the resource is published on TrustHub, making it accessible to everyone."
+    "section-4-card-1-title": "Suggest",
+    "section-4-card-2-title": "Review",
+    "section-4-card-3-title": "Publish",
+    "section-4-card-1-about": "Users or experts suggest new learning resources, tools, or services they find valuable.",
+    "section-4-card-2-about": "Our team and community rigorously review each submission for quality, relevance, and trustworthiness.",
+    "section-4-card-3-about": "Once verified, the resource is published on TrustHub, making it accessible to everyone."
   },
-  "catalog":{
-    "title":"Resource Catalog",
-    "about":"Discover and explore our curated collection of trusted resources.",
-    "showing":"Showing",
-    "resource":"resources",
-    "search":"Search resources..."
+  "catalog": {
+    "title": "Resource Catalog",
+    "about": "Discover and explore our curated collection of trusted resources.",
+    "showing": "Showing",
+    "resource": "resources",
+    "search": "Search resources..."
+  },
+
+  "add-page": {
+    "title": "Submit a Resource",
+    "about": "Help us expand TrustHub with useful tools and knowledge"
+  },
+
+  "add-form": {
+    "title": "Submission Form",
+    "about": "All submissions will be reviewed by AI",
+    "input-one": "Website Title",
+    "input-two": "Website URL",
+    "input-three": "Description",
+    "input-four": "Full Description",
+    "submit": "Submit Website",
+    "ai": "AI Decision"
+  },
+  "add-form-ai-unswer": {
+    "one": "Description must be at least 10 words",
+    "two": "Full description must be at least 20 words",
+    "three": "AI approved this site!",
+    "four": "Resource saved to Catalog!",
+    "five": "AI rejected the site",
+    "six": "AI is unsure — sending to moderators",
+    "seven": "Sent to Telegram moderation group",
+    "eight": "AI failed to process. Please try again later",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "manual": "Sent to Manual Review"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "question-one": "How do you verify resources?",
+    "answer-one": "Our team manually reviews each submission, checking functionality, legitimacy, and value before approval.",
+    "question-two": "Can I suggest a resource?",
+    "answer-two": "Use our Submit Resource page to suggest new tools and services for the community.",
+    "question-three": "Is TrustHub free to use?",
+    "answer-three": "Yes, TrustHub is completely free for all users. We believe in open access to quality resources.",
+    "question-four": "How often is content updated?",
+    "answer-four": "We review and update our directory weekly, removing outdated resources and adding new ones."
+  },
+  "contact": {
+    "card-one-title": "Email Us",
+    "card-one-about": "For general inquiries, partnerships, or support questions.",
+    "card-two-title": "Live Chat",
+    "card-two-about-1": "Available 9 AM - 5 PM EST",
+    "card-two-about": "Get instant help with our AI assistant or connect with our team.",
+    "card-three-title": "Response Time",
+    "card-three-about-1": "Within 24 hours",
+    "card-three-about": "We typically respond to all inquiries within one business day."
+  },
+  "contact-form": {
+    "title": "Send us a Message",
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "button":"Send Message"
+  },
+  "chat":{
+    "content": "Hello! I'm your TrustHub AI assistant. I can help you find resources, answer questions about our directory, or assist with submissions. What can I help you with today?",
+    "title":" AI Assistant",
+    "about":"Get personalized recommendations and instant help finding the right resources.",
+    "button":"SEND",
+    "quick":"Quick questions to get started:",
+    "one":"Show me design tools",
+    "two":"What are the best productivity apps?",
+    "three": "How do I submit a resource?",
+    "four":"Find development resources",
+    "error":"Something went wrong. Please try again later.",
+    "input":"Ask me about resources, categories, or how to submit..."
   }
 }

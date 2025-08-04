@@ -29,7 +29,7 @@ export interface Resource {
 }
 
 const Card = styled(Box)(() => ({
-  backgroundColor: "#f9f7f3",
+  backgroundColor: "#fff",
   borderRadius: "1.5rem",
   padding: "1.5rem 2rem",
   boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
@@ -65,6 +65,7 @@ export function Marquee({
   ...props
 }: MarqueeProps) {
   const resources = useAppSelector((state) => state.catalog.catalog) || [];
+  
 
   return (
     <div

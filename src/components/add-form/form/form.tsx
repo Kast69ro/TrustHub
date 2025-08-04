@@ -12,7 +12,6 @@ import {
   Divider,
   CircularProgress,
 } from "@mui/material";
-
 import { toast } from "sonner";
 import { Logo } from "@/components/shared/logo/logo";
 import { queryGeminiAI, type AiResponse } from "@/entities/api/check-site/check";
@@ -20,17 +19,29 @@ import axios from "axios";
 import { ResourceToAdd, saveResourceIfTrusted } from "@/entities/api/catalog/catalog";
 import Image from "next/image";
 import foto from "@/assets/form-img (2).jpeg";
+import { useTranslations } from "next-intl";
 
 export default function SubmissionPage() {
+  const t = useTranslations("add-form");
+  const k = useTranslations("add-page");
+  const i = useTranslations("add-form-ai-unswer");
+
   const [formData, setFormData] = useState({
     title: "",
     url: "",
     description: "",
     fullDescription: "",
   });
+
   const [aiDecision, setAiDecision] = useState<"Accepted" | "Rejected" | "Sent to Manual Review" | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const decisionMap: Record<string, string> = {
+    Accepted: i("accepted"),
+    Rejected: i("rejected"),
+    "Sent to Manual Review": i("manual"),
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -49,11 +60,11 @@ export default function SubmissionPage() {
     const errors = [];
 
     if (countWords(formData.description) < 10) {
-      errors.push("Description must be at least 10 words.");
+      errors.push(i("one"));
     }
 
     if (countWords(formData.fullDescription) < 20) {
-      errors.push("Full description must be at least 20 words.");
+      errors.push(i("two"));
     }
 
     if (errors.length > 0) {
@@ -71,7 +82,7 @@ export default function SubmissionPage() {
 
       if (aiResponse.trusted === true) {
         setAiDecision("Accepted");
-        toast.success("AI approved this site!");
+        toast.success(i("three"));
 
         const fullResource: ResourceToAdd = {
           category: aiResponse.category,
@@ -86,7 +97,7 @@ export default function SubmissionPage() {
         };
 
         await saveResourceIfTrusted(fullResource);
-        toast.success("Resource saved to Firebase!");
+        toast.success(i("four"));
 
         setFormData({
           title: "",
@@ -96,24 +107,36 @@ export default function SubmissionPage() {
         });
       } else if (aiResponse.trusted === false) {
         setAiDecision("Rejected");
-        toast.error("AI rejected the site");
+        toast.error(i("five"));
+        setFormData({
+          title: "",
+          url: "",
+          description: "",
+          fullDescription: "",
+        });
       } else {
         setAiDecision("Sent to Manual Review");
-        toast("AI is unsure — sending to moderators");
+        toast(i("six"));
+        setFormData({
+          title: "",
+          url: "",
+          description: "",
+          fullDescription: "",
+        });
 
         await axios.post("/api/contact", {
-          name: `AI unsure about ${formData.title} sie `,
+          name: `AI unsure about ${formData.title} site `,
           email: `URL: ${formData.url}`,
           subject: `Description:\n${formData.description}`,
           message: `Full Description:\n${formData.fullDescription}`,
         });
 
-        toast.success("Sent to Telegram moderation group");
+        toast.success(i("seven"));
       }
     } catch (err) {
       console.error("AI check failed:", err);
-      setError("AI failed to process. Please try again later.");
-      toast.error("AI failed to process. Please try again later.");
+      setError(i("eight"));
+      toast.error(i("eight"));
     } finally {
       setLoading(false);
     }
@@ -152,10 +175,10 @@ export default function SubmissionPage() {
           variant="h4"
           sx={{ fontFamily: "serif", fontWeight: "bold", mt: 2, color: "#000" }}
         >
-          Submit a Resource
+          {k("title")}
         </Typography>
         <Typography variant="subtitle1" sx={{ color: "#555", mt: 1 }}>
-          Help us expand TrustHub with useful tools and knowledge
+          {k("about")}
         </Typography>
       </Box>
 
@@ -170,11 +193,10 @@ export default function SubmissionPage() {
           maxWidth: 1100,
         }}
       >
-        {/* Форма */}
         <Card sx={{ flex: 1, minWidth: 350 }}>
           <CardHeader
-            title="Submission Form"
-            subheader="All submissions will be reviewed by AI"
+            title={t("title")}
+            subheader={t("about")}
             sx={{ textAlign: "center" }}
           />
           <CardContent>
@@ -182,7 +204,7 @@ export default function SubmissionPage() {
               <TextField
                 fullWidth
                 required
-                label="Website Title"
+                label={t("input-one")}
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
@@ -193,7 +215,7 @@ export default function SubmissionPage() {
               <TextField
                 fullWidth
                 required
-                label="Website URL"
+                label={t("input-two")}
                 name="url"
                 value={formData.url}
                 onChange={handleChange}
@@ -205,7 +227,7 @@ export default function SubmissionPage() {
               <TextField
                 fullWidth
                 required
-                label="Description"
+                label={t("input-three")}
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
@@ -218,7 +240,7 @@ export default function SubmissionPage() {
               <TextField
                 fullWidth
                 required
-                label="Full Description"
+                label={t("input-four")}
                 name="fullDescription"
                 value={formData.fullDescription}
                 onChange={handleChange}
@@ -242,7 +264,7 @@ export default function SubmissionPage() {
                   "&:hover": { bgcolor: "#e5dbca" },
                 }}
               >
-                {loading ? <CircularProgress size={24} /> : "Submit Website"}
+                {loading ? <CircularProgress size={24} /> : t("submit")}
               </Button>
             </form>
 
@@ -256,7 +278,7 @@ export default function SubmissionPage() {
               <>
                 <Divider sx={{ my: 3 }} />
                 <Typography variant="subtitle1" textAlign="center" fontWeight={600}>
-                  AI Decision:
+                  {t("ai")}:
                 </Typography>
                 <pre
                   style={{
@@ -267,14 +289,13 @@ export default function SubmissionPage() {
                     fontSize: 14,
                   }}
                 >
-                  {aiDecision}
+                  {decisionMap[aiDecision]}
                 </pre>
               </>
             )}
           </CardContent>
         </Card>
 
-        {/* Изображение */}
         <Box
           sx={{
             flex: 1,

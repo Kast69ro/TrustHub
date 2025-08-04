@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Box,
   Button,
@@ -19,6 +19,9 @@ import {
   PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
 
+import { getAIChatResponseWithHistory } from "@/entities/api/ai-assistent/ai";
+import { useTranslations } from "next-intl";
+
 interface Message {
   id: number;
   content: string;
@@ -26,28 +29,62 @@ interface Message {
   timestamp: Date;
 }
 
-const initialMessages: Message[] = [
-  {
-    id: 1,
-    content:
-      "Hello! I'm your TrustHub AI assistant. I can help you find resources, answer questions about our directory, or assist with submissions. What can I help you with today?",
-    sender: "assistant",
-    timestamp: new Date(),
-  },
-];
+interface ChatMessage {
+  sender: "user" | "assistant";
+  content: string;
+}
 
 export default function ChatPage() {
+  const t = useTranslations("chat");
+
+  const inputRef = useRef<HTMLInputElement>(null); 
+  const messagesEndRef = useRef<HTMLDivElement>(null); 
+
+  const initialMessages: Message[] = [
+    {
+      id: 1,
+      content: t("content"),
+      sender: "assistant",
+      timestamp: new Date(),
+    },
+  ];
+
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim() || isLoading) return;
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+      inputRef.current?.focus();
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const toChatMessages = (msgs: Message[]): ChatMessage[] =>
+    msgs.map((m) => ({
+      sender: m.sender,
+      content: m.content,
+    }));
+
+  const handleSendMessage = async (e: React.FormEvent | string) => {
+    if (typeof e !== "string") {
+      e.preventDefault();
+    }
+
+    const messageToSend = typeof e === "string" ? e : inputValue;
+
+    if (!messageToSend.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: messages.length + 1,
-      content: inputValue,
+      content: messageToSend,
       sender: "user",
       timestamp: new Date(),
     };
@@ -56,47 +93,56 @@ export default function ChatPage() {
     setInputValue("");
     setIsLoading(true);
 
-    // Имитация ответа AI с корректным использованием актуального состояния
-    setTimeout(() => {
-      setMessages((prevMessages) => {
-        const assistantMessage: Message = {
-          id: prevMessages.length + 1,
-          content: getAIResponse(inputValue),
+    try {
+      const aiText = await getAIChatResponseWithHistory(
+        toChatMessages([...messages, userMessage])
+      );
+
+      const assistantMessage: Message = {
+        id: messages.length + 2,
+        content: aiText,
+        sender: "assistant",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (err) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: messages.length + 2,
+          content: t("error") || "Something went wrong. Please try again later.",
           sender: "assistant",
           timestamp: new Date(),
-        };
-        return [...prevMessages, assistantMessage];
-      });
+        },
+      ]);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
-  const getAIResponse = (userInput: string): string => {
-    const input = userInput.toLowerCase();
-
-    if (input.includes("design") || input.includes("figma") || input.includes("ui")) {
-      return "For design resources, I'd recommend checking out Figma, Adobe Creative Suite, or Sketch. Would you like more design resources?";
-    }
-
-    if (input.includes("development") || input.includes("code") || input.includes("programming")) {
-      return "Great! We have VS Code, GitHub, and many frameworks. Are you looking for a specific language or tool?";
-    }
-
-    if (input.includes("productivity") || input.includes("organize") || input.includes("task")) {
-      return "For productivity, check out Notion, Todoist, or Slack. What productivity challenges do you have?";
-    }
-
-    if (input.includes("submit") || input.includes("add") || input.includes("suggest")) {
-      return "To submit a resource, please use our Submit Resource page. Would you like me to guide you through the submission?";
-    }
-
-    return "I'm here to help! What resources are you interested in? Design, development, productivity, or something else?";
+  const textFieldSx = {
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "#d7c4a3",
+      },
+      "&:hover fieldset": {
+        borderColor: "#d7c4a3",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#d7c4a3",
+        borderWidth: 2,
+      },
+    },
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: "#d7c4a3",
+    },
   };
+
+  const quickQuestionsKeys = ["one", "two", "three", "four"];
 
   return (
     <Box sx={{ bgcolor: "#f9f7f3", minHeight: "100vh", py: 8 }}>
       <Box maxWidth="md" mx="auto" px={2}>
-        {/* Заголовок */}
         <Typography
           variant="h4"
           fontWeight="bold"
@@ -105,13 +151,12 @@ export default function ChatPage() {
           fontFamily="serif"
           color="#1a1a1a"
         >
-          AI Assistant
+          {t("title")}
         </Typography>
         <Typography variant="body1" align="center" mb={4} color="text.secondary">
-          Get personalized recommendations and instant help finding the right resources.
+          {t("about")}
         </Typography>
 
-        {/* Чат */}
         <Card sx={{ display: "flex", flexDirection: "column", height: 600 }}>
           <CardContent
             sx={{
@@ -130,12 +175,25 @@ export default function ChatPage() {
                 key={msg.id}
                 sx={{
                   display: "flex",
-                  justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
+                  justifyContent:
+                    msg.sender === "user" ? "flex-end" : "flex-start",
                 }}
               >
-                <Stack direction="row" spacing={1} alignItems="flex-end" sx={{ maxWidth: "80%" }}>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  alignItems="flex-end"
+                  sx={{ maxWidth: "80%" }}
+                >
                   {msg.sender === "assistant" && (
-                    <Avatar sx={{ bgcolor: "#f1eadb", color: "#1a1a1a", width: 32, height: 32 }}>
+                    <Avatar
+                      sx={{
+                        bgcolor: "#f1eadb",
+                        color: "#1a1a1a",
+                        width: 32,
+                        height: 32,
+                      }}
+                    >
                       <BoltIcon style={{ width: 20, height: 20 }} />
                     </Avatar>
                   )}
@@ -164,12 +222,17 @@ export default function ChatPage() {
                             : "rgba(0,0,0,0.5)",
                       }}
                     >
-                      {msg.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      {msg.timestamp.toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </Typography>
                   </Box>
                   {msg.sender === "user" && (
                     <Avatar sx={{ bgcolor: "#1a1a1a", width: 32, height: 32 }}>
-                      <UserIcon style={{ width: 20, height: 20, color: "#fff" }} />
+                      <UserIcon
+                        style={{ width: 20, height: 20, color: "#fff" }}
+                      />
                     </Avatar>
                   )}
                 </Stack>
@@ -179,68 +242,105 @@ export default function ChatPage() {
             {isLoading && (
               <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Avatar sx={{ bgcolor: "#f1eadb", color: "#1a1a1a", width: 32, height: 32 }}>
+                  <Avatar
+                    sx={{
+                      bgcolor: "#f1eadb",
+                      color: "#1a1a1a",
+                      width: 32,
+                      height: 32,
+                    }}
+                  >
                     <BoltIcon style={{ width: 20, height: 20 }} />
                   </Avatar>
                   <CircularProgress size={16} thickness={4} />
                 </Stack>
               </Box>
             )}
+            <div ref={messagesEndRef} />
           </CardContent>
 
-          {/* Ввод сообщения */}
           <Box
             component="form"
             onSubmit={handleSendMessage}
-            sx={{ display: "flex", gap: 2, p: 2, bgcolor: "white", borderTop: "1px solid #ddd" }}
+            sx={{
+              display: "flex",
+              gap: 1,
+              p: { xs: 1, md: 2 },
+              bgcolor: "white",
+              borderTop: "1px solid #ddd",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
           >
             <TextField
               variant="outlined"
-              placeholder="Ask me about resources, categories, or how to submit..."
+              placeholder={t("input")}
               fullWidth
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               disabled={isLoading}
               size="medium"
+              sx={textFieldSx}
+              inputRef={inputRef}
             />
             <Button
               type="submit"
               variant="contained"
               disabled={isLoading || !inputValue.trim()}
-              sx={{ minWidth: 100, display: "flex", alignItems: "center", gap: 1 }}
+              sx={{
+                minWidth: 100,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                bgcolor: "#1a1a1a",
+                color: "#f9f7f3",
+                py: 1.5,
+                fontWeight: "bold",
+                "&:hover": {
+                  bgcolor: "#333",
+                },
+                flexShrink: 0,
+                height: "56px",
+              }}
             >
-              Send <PaperAirplaneIcon style={{ width: 20, height: 20 }} />
+              {t("button")} <PaperAirplaneIcon style={{ width: 20, height: 20 }} />
             </Button>
           </Box>
         </Card>
 
-        {/* Быстрые вопросы */}
         <Box mt={4} textAlign="center">
           <Typography variant="body2" color="text.secondary" mb={2}>
-            Quick questions to get started:
+            {t("quick")}
           </Typography>
-          <Stack direction="row" spacing={1} justifyContent="center" flexWrap="wrap" gap={1}>
-            {[
-              "Show me design tools",
-              "What are the best productivity apps?",
-              "How do I submit a resource?",
-              "Find development resources",
-            ].map((question) => (
-              <Button
-                key={question}
-                variant="outlined"
-                size="small"
-                onClick={() => setInputValue(question)}
-                sx={{
-                  borderColor: "#d7c4a3",
-                  color: "#1a1a1a",
-                  textTransform: "none",
-                  "&:hover": { backgroundColor: "#f1eadb", borderColor: "#bfa974" },
-                }}
-              >
-                {question}
-              </Button>
-            ))}
+          <Stack
+            direction="row"
+            spacing={1}
+            justifyContent="center"
+            flexWrap="wrap"
+            gap={1}
+          >
+            {quickQuestionsKeys.map((key) => {
+              const question = t(key);
+              return (
+                <Button
+                  key={key}
+                  variant="outlined"
+                  size="small"
+                  onClick={() => handleSendMessage(question)}
+                  sx={{
+                    borderColor: "#d7c4a3",
+                    color: "#1a1a1a",
+                    textTransform: "none",
+                    "&:hover": {
+                      backgroundColor: "#f1eadb",
+                      borderColor: "#bfa974",
+                    },
+                  }}
+                >
+                  {question}
+                </Button>
+              );
+            })}
           </Stack>
         </Box>
       </Box>

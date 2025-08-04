@@ -13,9 +13,9 @@ import {
   Tabs,
   Tab,
 } from "@mui/material";
-import faq from '@/assets/faq.jpeg';
-import contact from '@/assets/contact.jpeg';
-import contact1 from '@/assets/contact-2.jpeg';
+import faq from "@/assets/faq.jpeg";
+import contact from "@/assets/contact.jpeg";
+import contact1 from "@/assets/contact-2.jpeg";
 import {
   EnvelopeIcon,
   ChatBubbleOvalLeftEllipsisIcon,
@@ -23,8 +23,13 @@ import {
   PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function ContactTabs() {
+  const t = useTranslations("faq");
+  const k = useTranslations("contact");
+  const f = useTranslations("contact-form");
+
   const [tabIndex, setTabIndex] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
@@ -34,7 +39,9 @@ export default function ContactTabs() {
   });
 
   const infoCardsRef = useRef<HTMLDivElement>(null);
-  const [infoCardsHeight, setInfoCardsHeight] = useState<number | undefined>(undefined);
+  const [infoCardsHeight, setInfoCardsHeight] = useState<number | undefined>(
+    undefined
+  );
 
   const formRef = useRef<HTMLDivElement>(null);
   const [formHeight, setFormHeight] = useState<number | undefined>(undefined);
@@ -75,44 +82,42 @@ export default function ContactTabs() {
   const infoCards = [
     {
       icon: <EnvelopeIcon className="w-6 h-6 text-[#1a1a1a]" />,
-      title: "Email Us",
+      title: k('card-one-title'),
       subtitle: "hello@trusthub.com",
-      description: "For general inquiries, partnerships, or support questions.",
+      description: k("card-one-about"),
     },
     {
-      icon: <ChatBubbleOvalLeftEllipsisIcon className="w-6 h-6 text-[#1a1a1a]" />,
-      title: "Live Chat",
-      subtitle: "Available 9 AM - 5 PM EST",
-      description: "Get instant help with our AI assistant or connect with our team.",
+      icon: (
+        <ChatBubbleOvalLeftEllipsisIcon className="w-6 h-6 text-[#1a1a1a]" />
+      ),
+     title: k('card-two-title'),
+      subtitle: k("card-two-about-1"),
+      description: k("card-two-about")
     },
     {
       icon: <ClockIcon className="w-6 h-6 text-[#1a1a1a]" />,
-      title: "Response Time",
-      subtitle: "Within 24 hours",
-      description: "We typically respond to all inquiries within one business day.",
+      title: k('card-three-title') ,
+      subtitle: k("card-three-about-1"),
+      description: k("card-three-about")
     },
   ];
 
   const faqs = [
     {
-      question: "How do you verify resources?",
-      answer:
-        "Our team manually reviews each submission, checking functionality, legitimacy, and value before approval.",
+      question: t("question-one"),
+      answer: t("answer-one"),
     },
     {
-      question: "Can I suggest a resource?",
-      answer:
-        "Use our Submit Resource page to suggest new tools and services for the community.",
+      question: t("question-two"),
+      answer: t("answer-two"),
     },
     {
-      question: "Is TrustHub free to use?",
-      answer:
-        "Yes, TrustHub is completely free for all users. We believe in open access to quality resources.",
+      question: t("question-three"),
+      answer: t("answer-three"),
     },
     {
-      question: "How often is content updated?",
-      answer:
-        "We review and update our directory weekly, removing outdated resources and adding new ones.",
+      question: t("question-four"),
+      answer: t("answer-four"), 
     },
   ];
 
@@ -129,7 +134,7 @@ export default function ContactTabs() {
         borderWidth: 2,
       },
     },
-   
+
     "& .MuiInputLabel-root.Mui-focused": {
       color: "#d7c4a3",
     },
@@ -157,7 +162,12 @@ export default function ContactTabs() {
   return (
     <Box sx={{ bgcolor: "#f9f7f3", py: 10, px: { xs: 2, md: 4 } }}>
       <Box sx={{ bgcolor: "#f9f7f3", borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={tabIndex} onChange={(e, val) => setTabIndex(val)} centered sx={tabsSx}>
+        <Tabs
+          value={tabIndex}
+          onChange={(e, val) => setTabIndex(val)}
+          centered
+          sx={tabsSx}
+        >
           <Tab label="FAQ" sx={tabSx} />
           <Tab label="Contact" sx={tabSx} />
         </Tabs>
@@ -177,7 +187,7 @@ export default function ContactTabs() {
               alignItems: "flex-start",
             }}
           >
-            <Box flex={1} sx={{ borderRadius: 3, overflow: "hidden" }}>
+            <Box flex={1} sx={{ borderRadius: 3, overflow: "hidden",display:'flex',alignItems:'center' }}>
               <Image
                 src={faq}
                 alt="FAQ Illustration"
@@ -210,12 +220,17 @@ export default function ContactTabs() {
                   color="#1a1a1a"
                   mb={4}
                 >
-                  Frequently Asked Questions
+                  {t("title")}
                 </Typography>
                 <Stack spacing={5}>
                   {faqs.map((faq, idx) => (
                     <Box key={idx}>
-                      <Typography variant="subtitle1" fontWeight="600" mb={1} color="#1a1a1a">
+                      <Typography
+                        variant="subtitle1"
+                        fontWeight="600"
+                        mb={1}
+                        color="#1a1a1a"
+                      >
                         {faq.question}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
@@ -230,22 +245,29 @@ export default function ContactTabs() {
         )}
 
         {tabIndex === 1 && (
-          <Stack spacing={6} alignItems="flex-start" width="100%" maxWidth="1200px" mx="auto">
+          <Stack
+            spacing={6}
+            alignItems="flex-start"
+            width="100%"
+            maxWidth="1200px"
+            mx="auto"
+          >
             <Box
               sx={{
                 display: "flex",
+                flexDirection: { xs: "column", md: "row" },
                 gap: 4,
                 width: "100%",
                 alignItems: "stretch",
               }}
             >
               <Box
-                flex={1}
+                flex={1.65}
                 sx={{
                   borderRadius: 3,
                   overflow: "hidden",
-                  height: infoCardsHeight ? infoCardsHeight : "auto",
-                  minHeight: 400,
+                  height: { xs: 200, sm: 300, md: infoCardsHeight || 400 },
+                  minHeight: 200,
                 }}
               >
                 <Image
@@ -257,12 +279,20 @@ export default function ContactTabs() {
                     width: "100%",
                     height: "100%",
                   }}
-                  sizes="(min-width: 900px) 33vw, 100vw"
+                  sizes="(max-width: 900px) 100vw, 33vw"
                   priority
                 />
               </Box>
 
-              <Stack flex={1} spacing={4} ref={infoCardsRef} sx={{ flexShrink: 0 }}>
+              <Stack
+                flex={1}
+                spacing={4}
+                ref={infoCardsRef}
+                sx={{
+                  flexShrink: 0,
+                  width: "100%",
+                }}
+              >
                 {infoCards.map((item, idx) => (
                   <Paper
                     key={idx}
@@ -275,7 +305,12 @@ export default function ContactTabs() {
                       "&:hover": { boxShadow: 6 },
                     }}
                   >
-                    <Stack direction="row" spacing={2} alignItems="center" mb={1}>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      alignItems="center"
+                      mb={1}
+                    >
                       <Box
                         sx={{
                           bgcolor: "#d7c4a3",
@@ -308,24 +343,26 @@ export default function ContactTabs() {
             <Box
               sx={{
                 display: "flex",
+                flexDirection: { xs: "column", md: "row" },
                 gap: 4,
                 width: "100%",
                 alignItems: "stretch",
               }}
             >
+              {/* Форма */}
               <Paper
                 ref={formRef}
                 elevation={4}
                 sx={{
-                  p: { xs: 3, md: 4 },
+                  p: { xs: 2, md: 4 },
                   borderRadius: 3,
                   flex: 1.5,
                   display: "flex",
                   flexDirection: "column",
                 }}
               >
-                <Typography variant="h5" fontWeight="bold"  mb={3}>
-                  Send us a Message
+                <Typography variant="h5" fontWeight="bold" mb={3}>
+                  {f('title')}
                 </Typography>
                 <Divider sx={{ mb: 3, borderColor: "#d7c4a3" }} />
                 <Box
@@ -337,45 +374,53 @@ export default function ContactTabs() {
                     <Stack direction={{ xs: "column", sm: "row" }} spacing={3}>
                       <TextField
                         fullWidth
-                        label="Name"
+                        label={f('name')}
                         id="name"
                         variant="outlined"
                         value={formData.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("name", e.target.value)
+                        }
                         required
                         sx={textFieldSx}
                       />
                       <TextField
                         fullWidth
-                        label="Email"
+                        label={f('email')}
                         id="email"
                         type="email"
                         variant="outlined"
                         value={formData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("email", e.target.value)
+                        }
                         required
                         sx={textFieldSx}
                       />
                     </Stack>
                     <TextField
                       fullWidth
-                      label="Subject"
+                      label={f('subject')}
                       id="subject"
                       variant="outlined"
                       value={formData.subject}
-                      onChange={(e) => handleInputChange("subject", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("subject", e.target.value)
+                      }
                       required
                       sx={textFieldSx}
                     />
                     <TextField
                       fullWidth
-                      label="Message"
+                      label={f('message')}
                       id="message"
                       multiline
                       rows={5}
                       variant="outlined"
                       value={formData.message}
-                      onChange={(e) => handleInputChange("message", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("message", e.target.value)
+                      }
                       required
                       sx={{ ...textFieldSx, flexGrow: 1 }}
                     />
@@ -392,9 +437,11 @@ export default function ContactTabs() {
                           bgcolor: "#333",
                         },
                       }}
-                      endIcon={<PaperAirplaneIcon style={{ width: 20, height: 20 }} />}
+                      endIcon={
+                        <PaperAirplaneIcon style={{ width: 20, height: 20 }} />
+                      }
                     >
-                      Send Message
+                      {f('button')}
                     </Button>
                   </Stack>
                 </Box>
@@ -405,7 +452,7 @@ export default function ContactTabs() {
                   flex: 1,
                   borderRadius: 3,
                   overflow: "hidden",
-                  height: formHeight ? formHeight : 400,
+                  height: { xs: 200, sm: 300, md: formHeight || 400 },
                   width: "100%",
                 }}
               >
@@ -418,7 +465,7 @@ export default function ContactTabs() {
                     width: "100%",
                     height: "100%",
                   }}
-                  sizes="(min-width: 900px) 25vw, 100vw"
+                  sizes="(max-width: 900px) 100vw, 25vw"
                   priority
                 />
               </Box>

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -13,14 +15,14 @@ import {
   ShieldCheckIcon,
   SparklesIcon,
   LightBulbIcon,
+  ArrowDownIcon,
 } from "@heroicons/react/24/outline";
-import head from "@/assets/about-header.jpeg";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
+import { useTranslations } from "next-intl";
 import foto from "@/assets/about.png";
-import { getTranslations } from "next-intl/server";
 
-export default async function AboutUsPage() {
-  const t = await getTranslations("about");
+export default function AboutUsPage() {
+  const t = useTranslations("about");
 
   const black = "#000000";
   const white = "#FFFFFF";
@@ -53,7 +55,6 @@ export default async function AboutUsPage() {
       }}
     >
       <Box component="main" sx={{ flex: 1 }}>
-        {/* Hero Section */}
         <Box
           component="section"
           sx={{
@@ -71,33 +72,15 @@ export default async function AboutUsPage() {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <Container
-            sx={{
-              position: "relative",
-              zIndex: 1,
-              px: { xs: 4, md: 6 },
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 2,
-              }}
-            >
+          <Container sx={{ position: "relative", zIndex: 1, px: { xs: 4, md: 6 } }}>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
               <Typography
                 component="h1"
                 variant="h2"
                 fontWeight="bold"
                 sx={{
                   textShadow: "0 1px 2px rgba(0,0,0,0.1)",
-                  fontSize: {
-                    xs: "2.25rem",
-                    sm: "3rem",
-                    md: "3.75rem",
-                    lg: "4.5rem",
-                  },
+                  fontSize: { xs: "2.25rem", sm: "3rem", md: "3.75rem", lg: "4.5rem" },
                   letterSpacing: "-0.025em",
                   color: black,
                 }}
@@ -142,11 +125,7 @@ export default async function AboutUsPage() {
           </Container>
         </Box>
 
-        {/* Who We Are Section */}
-        <Box
-          component="section"
-          sx={{ py: { xs: 12, md: 24, lg: 32 }, backgroundColor: white }}
-        >
+        <Box component="section" sx={{ py: { xs: 12, md: 24, lg: 32 }, backgroundColor: white }}>
           <Container sx={{ px: { xs: 4, md: 6 } }}>
             <Box
               sx={{
@@ -157,19 +136,8 @@ export default async function AboutUsPage() {
                 gap: 6,
               }}
             >
-              {/* Text */}
-              <Box
-                sx={{
-                  flex: 1,
-                  maxWidth: { md: "50%" },
-                }}
-              >
-                <Typography
-                  variant="h4"
-                  fontWeight="bold"
-                  gutterBottom
-                  sx={{ color: black, mb: 2 }}
-                >
+              <Box sx={{ flex: 1, maxWidth: { md: "50%" } }}>
+                <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ color: black, mb: 2 }}>
                   {t("section-2-title")}
                 </Typography>
                 <Typography
@@ -190,7 +158,6 @@ export default async function AboutUsPage() {
                 </Typography>
               </Box>
 
-              {/* Image */}
               <Box
                 sx={{
                   flex: 1,
@@ -208,56 +175,25 @@ export default async function AboutUsPage() {
                   },
                 }}
               >
-                <Image
-                  src={foto}
-                  alt="Who We Are"
-                  width={800}
-                  height={500}
-                  style={{ display: "block" }}
-                />
+                <Image src={foto} alt="Who We Are" width={800} height={500} style={{ display: "block" }} />
               </Box>
             </Box>
           </Container>
         </Box>
 
-        {/* Our Values */}
-        <Box
-          component="section"
-          sx={{ py: { xs: 12, md: 24, lg: 30 }, backgroundColor: bgColor }}
-        >
+        <Box component="section" sx={{ py: { xs: 12, md: 24, lg: 30 }, backgroundColor: bgColor }}>
           <Container sx={{ px: { xs: 4, md: 6 }, textAlign: "center" }}>
-            <Typography
-              variant="h4"
-              fontWeight="bold"
-              mb={6}
-              sx={{ color: black }}
-            >
+            <Typography variant="h4" fontWeight="bold" mb={6} sx={{ color: black }}>
               {t("section-3-title")}
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                gap: 4,
-              }}
-            >
+            <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 4 }}>
               {[1, 2, 3].map((val, i) => {
-                const Icon =
-                  val === 1
-                    ? ShieldCheckIcon
-                    : val === 2
-                    ? SparklesIcon
-                    : LightBulbIcon;
+                const Icon = val === 1 ? ShieldCheckIcon : val === 2 ? SparklesIcon : LightBulbIcon;
                 return (
                   <Card
                     key={i}
                     sx={{
-                      width: {
-                        xs: "100%",
-                        sm: "calc(50% - 16px)",
-                        lg: "calc(33.333% - 22px)",
-                      },
+                      width: { xs: "100%", sm: "calc(50% - 16px)", lg: "calc(33.333% - 22px)" },
                       p: 4,
                       borderRadius: 3,
                       boxShadow: 4,
@@ -294,12 +230,11 @@ export default async function AboutUsPage() {
           </Container>
         </Box>
 
-        {/* How We Check Resources */}
         <Box
           component="section"
           sx={{
-            py: { xs: 12, md: 24, lg: 32 },
-            px: { xs: 4, md: 6 },
+            py: { xs: 10, md: 20, lg: 32 },
+            px: { xs: 2, sm: 4, md: 6 },
             backgroundColor: white,
           }}
         >
@@ -307,8 +242,8 @@ export default async function AboutUsPage() {
             variant="h4"
             fontWeight="bold"
             textAlign="center"
-            mb={8}
-            sx={{ color: "black" }}
+            mb={{ xs: 6, md: 8 }}
+            sx={{ color: black }}
           >
             {t("section-4-title")}
           </Typography>
@@ -316,38 +251,48 @@ export default async function AboutUsPage() {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "center",
+              flexDirection: { xs: "column", md: "row" },
               alignItems: "center",
-              gap: 3,
+              justifyContent: "center",
               flexWrap: "wrap",
+              gap: { xs: 4, md: 3 },
             }}
           >
             {steps.map((step, i) => (
-              <Box key={i} sx={{ display: "flex", alignItems: "center" }}>
+              <Box
+                key={i}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: { xs: "column", sm: "row" },
+                  width: { xs: "100%", md: "auto" },
+                }}
+              >
                 <Box
                   sx={{
-                    width: 400,
+                    width: { xs: "100%", sm: 340, md: 400 },
                     backgroundColor: white,
                     border: `1px solid ${bgColor}`,
                     borderRadius: 3,
-                    p: 8,
+                    p: { xs: 4, sm: 6, md: 8 },
                     textAlign: "center",
                     boxShadow: 2,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
+                    mx: "auto",
                   }}
                 >
                   <Box
                     sx={{
-                      width: 64,
-                      height: 64,
+                      width: 56,
+                      height: 56,
                       mb: 2,
                       borderRadius: "50%",
                       bgcolor: beige,
                       color: black,
                       fontWeight: "bold",
-                      fontSize: "1.75rem",
+                      fontSize: "1.5rem",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -360,25 +305,35 @@ export default async function AboutUsPage() {
                     variant="h6"
                     fontWeight="bold"
                     mb={1}
-                    sx={{ color: black }}
+                    sx={{ color: black, fontSize: { xs: 16, md: 18 } }}
                   >
                     {step.title}
                   </Typography>
-                  <Typography color={black} sx={{ fontSize: 14 }}>
+                  <Typography color={black} sx={{ fontSize: { xs: 13, sm: 14 }, lineHeight: 1.5 }}>
                     {step.description}
                   </Typography>
                 </Box>
+
                 {i < steps.length - 1 && (
-                  <ArrowRightIcon
-                    style={{
-                      width: 40,
-                      height: 40,
-                      color: beige,
-                      marginLeft: 20,
-                      marginRight: 20,
-                      flexShrink: 0,
-                    }}
-                  />
+                  <>
+                    <Box
+                      sx={{
+                        display: { xs: "none", md: "block" },
+                        mx: 2,
+                      }}
+                    >
+                      <ArrowRightIcon style={{ width: 32, height: 32, color: beige }} />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: { xs: "block", md: "none" },
+                        mt: 2,
+                        mb: 2,
+                      }}
+                    >
+                      <ArrowDownIcon style={{ width: 32, height: 32, color: beige }} />
+                    </Box>
+                  </>
                 )}
               </Box>
             ))}
