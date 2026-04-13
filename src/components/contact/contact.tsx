@@ -39,12 +39,13 @@ export default function ContactTabs() {
   });
 
   const infoCardsRef = useRef<HTMLDivElement>(null);
-  const [infoCardsHeight, setInfoCardsHeight] = useState<number | undefined>(
-    undefined
-  );
+  const [infoCardsHeight, setInfoCardsHeight] = useState<number | undefined>();
 
   const formRef = useRef<HTMLDivElement>(null);
-  const [formHeight, setFormHeight] = useState<number | undefined>(undefined);
+  const [formHeight, setFormHeight] = useState<number | undefined>();
+
+  const faqTextRef = useRef<HTMLDivElement>(null);
+  const [faqTextHeight, setFaqTextHeight] = useState<number | undefined>();
 
   useEffect(() => {
     if (infoCardsRef.current) {
@@ -53,7 +54,10 @@ export default function ContactTabs() {
     if (formRef.current) {
       setFormHeight(formRef.current.clientHeight);
     }
-  }, [tabIndex, formData]);
+    if (faqTextRef.current) {
+      setFaqTextHeight(faqTextRef.current.clientHeight);
+    }
+  }, [tabIndex, formData, t]); 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +69,7 @@ export default function ContactTabs() {
       });
       const result = await res.json();
       if (res.ok) {
-        toast.success("Сообщение успешно отправлено!");
+        toast.success(f("tost"));
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
         toast.error("Ошибка: " + (result.error || "Неизвестная ошибка"));
@@ -82,7 +86,7 @@ export default function ContactTabs() {
   const infoCards = [
     {
       icon: <EnvelopeIcon className="w-6 h-6 text-[#1a1a1a]" />,
-      title: k('card-one-title'),
+      title: k("card-one-title"),
       subtitle: "hello@trusthub.com",
       description: k("card-one-about"),
     },
@@ -90,73 +94,44 @@ export default function ContactTabs() {
       icon: (
         <ChatBubbleOvalLeftEllipsisIcon className="w-6 h-6 text-[#1a1a1a]" />
       ),
-     title: k('card-two-title'),
+      title: k("card-two-title"),
       subtitle: k("card-two-about-1"),
-      description: k("card-two-about")
+      description: k("card-two-about"),
     },
     {
       icon: <ClockIcon className="w-6 h-6 text-[#1a1a1a]" />,
-      title: k('card-three-title') ,
+      title: k("card-three-title"),
       subtitle: k("card-three-about-1"),
-      description: k("card-three-about")
+      description: k("card-three-about"),
     },
   ];
 
   const faqs = [
-    {
-      question: t("question-one"),
-      answer: t("answer-one"),
-    },
-    {
-      question: t("question-two"),
-      answer: t("answer-two"),
-    },
-    {
-      question: t("question-three"),
-      answer: t("answer-three"),
-    },
-    {
-      question: t("question-four"),
-      answer: t("answer-four"), 
-    },
+    { question: t("question-one"), answer: t("answer-one") },
+    { question: t("question-two"), answer: t("answer-two") },
+    { question: t("question-three"), answer: t("answer-three") },
+    { question: t("question-four"), answer: t("answer-four") },
   ];
 
   const textFieldSx = {
     "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "#d7c4a3",
-      },
-      "&:hover fieldset": {
-        borderColor: "#d7c4a3",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "#d7c4a3",
-        borderWidth: 2,
-      },
+      "& fieldset": { borderColor: "#d7c4a3" },
+      "&:hover fieldset": { borderColor: "#d7c4a3" },
+      "&.Mui-focused fieldset": { borderColor: "#d7c4a3", borderWidth: 2 },
     },
-
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: "#d7c4a3",
-    },
+    "& .MuiInputLabel-root.Mui-focused": { color: "#d7c4a3" },
   };
 
   const tabsSx = {
-    "& .MuiTabs-indicator": {
-      bgcolor: "#d7c4a3",
-    },
+    "& .MuiTabs-indicator": { bgcolor: "#d7c4a3" },
   };
 
   const tabSx = {
     color: "#1a1a1a",
     fontWeight: "bold",
     textTransform: "none",
-    "&.Mui-selected": {
-      color: "#d7c4a3",
-    },
-    "&:hover": {
-      color: "#d7c4a3",
-      opacity: 1,
-    },
+    "&.Mui-selected": { color: "#d7c4a3" },
+    "&:hover": { color: "#d7c4a3", opacity: 1 },
   };
 
   return (
@@ -184,10 +159,18 @@ export default function ContactTabs() {
               display: "flex",
               flexDirection: { xs: "column", md: "row" },
               gap: 4,
-              alignItems: "flex-start",
+              alignItems: "stretch",
             }}
           >
-            <Box flex={1} sx={{ borderRadius: 3, overflow: "hidden",display:'flex',alignItems:'center' }}>
+            <Box
+              flex={1}
+              sx={{
+                borderRadius: 3,
+                overflow: "hidden",
+                height: faqTextHeight || 300,
+                minHeight: 300,
+              }}
+            >
               <Image
                 src={faq}
                 alt="FAQ Illustration"
@@ -196,14 +179,13 @@ export default function ContactTabs() {
                   objectFit: "cover",
                   width: "100%",
                   height: "100%",
-                  minHeight: 300,
                 }}
                 sizes="(min-width: 900px) 50vw, 100vw"
                 priority
               />
             </Box>
 
-            <Box flex={2}>
+            <Box flex={2} ref={faqTextRef}>
               <Paper
                 sx={{
                   p: { xs: 3, md: 5 },
@@ -218,17 +200,16 @@ export default function ContactTabs() {
                   fontWeight="bold"
                   textAlign="center"
                   color="#1a1a1a"
-                  mb={4}
+                  mb={2}
                 >
                   {t("title")}
                 </Typography>
-                <Stack spacing={5}>
+                <Stack spacing={4.2}>
                   {faqs.map((faq, idx) => (
                     <Box key={idx}>
                       <Typography
                         variant="subtitle1"
                         fontWeight="600"
-                        mb={1}
                         color="#1a1a1a"
                       >
                         {faq.question}
@@ -245,13 +226,7 @@ export default function ContactTabs() {
         )}
 
         {tabIndex === 1 && (
-          <Stack
-            spacing={6}
-            alignItems="flex-start"
-            width="100%"
-            maxWidth="1200px"
-            mx="auto"
-          >
+          <Stack spacing={6} alignItems="flex-start" width="100%" mx="auto">
             <Box
               sx={{
                 display: "flex",
@@ -288,10 +263,7 @@ export default function ContactTabs() {
                 flex={1}
                 spacing={4}
                 ref={infoCardsRef}
-                sx={{
-                  flexShrink: 0,
-                  width: "100%",
-                }}
+                sx={{ flexShrink: 0, width: "100%" }}
               >
                 {infoCards.map((item, idx) => (
                   <Paper
@@ -305,12 +277,7 @@ export default function ContactTabs() {
                       "&:hover": { boxShadow: 6 },
                     }}
                   >
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      alignItems="center"
-                      mb={1}
-                    >
+                    <Stack direction="row" spacing={2} alignItems="center" mb={1}>
                       <Box
                         sx={{
                           bgcolor: "#d7c4a3",
@@ -349,7 +316,6 @@ export default function ContactTabs() {
                 alignItems: "stretch",
               }}
             >
-              {/* Форма */}
               <Paper
                 ref={formRef}
                 elevation={4}
@@ -362,7 +328,7 @@ export default function ContactTabs() {
                 }}
               >
                 <Typography variant="h5" fontWeight="bold" mb={3}>
-                  {f('title')}
+                  {f("title")}
                 </Typography>
                 <Divider sx={{ mb: 3, borderColor: "#d7c4a3" }} />
                 <Box
@@ -374,7 +340,7 @@ export default function ContactTabs() {
                     <Stack direction={{ xs: "column", sm: "row" }} spacing={3}>
                       <TextField
                         fullWidth
-                        label={f('name')}
+                        label={f("name")}
                         id="name"
                         variant="outlined"
                         value={formData.name}
@@ -386,7 +352,7 @@ export default function ContactTabs() {
                       />
                       <TextField
                         fullWidth
-                        label={f('email')}
+                        label={f("email")}
                         id="email"
                         type="email"
                         variant="outlined"
@@ -400,7 +366,7 @@ export default function ContactTabs() {
                     </Stack>
                     <TextField
                       fullWidth
-                      label={f('subject')}
+                      label={f("subject")}
                       id="subject"
                       variant="outlined"
                       value={formData.subject}
@@ -412,7 +378,7 @@ export default function ContactTabs() {
                     />
                     <TextField
                       fullWidth
-                      label={f('message')}
+                      label={f("message")}
                       id="message"
                       multiline
                       rows={5}
@@ -441,7 +407,7 @@ export default function ContactTabs() {
                         <PaperAirplaneIcon style={{ width: 20, height: 20 }} />
                       }
                     >
-                      {f('button')}
+                      {f("button")}
                     </Button>
                   </Stack>
                 </Box>

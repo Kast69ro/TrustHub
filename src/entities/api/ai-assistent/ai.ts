@@ -46,7 +46,7 @@ If you don't have enough information to answer, politely ask for clarification.
       {
         headers: { "Content-Type": "application/json" },
         params: {
-          key: "AIzaSyDmOu0xHV1Og4YvXjfxt_8qRew5dJrcvqU",
+          key: "AIzaSyB9mNoZ78CKJ1ZMdzxkHtteXRwDFtVdceI",
         },
       }
     );

@@ -128,19 +128,21 @@
     "email": "Email",
     "subject": "Subject",
     "message": "Message",
-    "button":"Send Message"
+    "button": "Send Message",
+    "tost": "Message sent successfully!",
+    "error":""
   },
-  "chat":{
+  "chat": {
     "content": "Hello! I'm your TrustHub AI assistant. I can help you find resources, answer questions about our directory, or assist with submissions. What can I help you with today?",
-    "title":" AI Assistant",
-    "about":"Get personalized recommendations and instant help finding the right resources.",
-    "button":"SEND",
-    "quick":"Quick questions to get started:",
-    "one":"Show me design tools",
-    "two":"What are the best productivity apps?",
+    "title": " AI Assistant",
+    "about": "Get personalized recommendations and instant help finding the right resources.",
+    "button": "SEND",
+    "quick": "Quick questions to get started:",
+    "one": "Show me design tools",
+    "two": "What are the best productivity apps?",
     "three": "How do I submit a resource?",
-    "four":"Find development resources",
-    "error":"Something went wrong. Please try again later.",
-    "input":"Ask me about resources, categories, or how to submit..."
+    "four": "Find development resources",
+    "error": "Something went wrong. Please try again later.",
+    "input": "Ask me about resources, categories, or how to submit..."
   }
 }

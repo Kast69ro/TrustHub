@@ -155,8 +155,10 @@ export default function ResourceDetailPage({ id }: ResourceDetailPageProps) {
         </Card>
         
 
-     <Marquee pauseOnHover repeat={5}/>
       </Box>
+      <div className="mt-[20px]">
+     <Marquee pauseOnHover repeat={5}/>
+      </div>
     </Box>
                 </>
   );

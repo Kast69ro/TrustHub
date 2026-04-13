@@ -3,8 +3,28 @@ import { NextRequest, NextResponse } from "next/server";
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID!;
 
+const lastSendMap = new Map<string, number>();
+const TIMEOUT_MS = 60 * 5000; 
+
 export async function POST(request: NextRequest) {
   try {
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      request.headers.get("x-real-ip") ??
+      "unknown";
+
+    const now = Date.now();
+    const lastSent = lastSendMap.get(ip) || 0;
+
+    if (now - lastSent < TIMEOUT_MS) {
+      return NextResponse.json(
+        { error: "Пожалуйста, подождите перед повторной отправкой." },
+        { status: 429 }
+      );
+    }
+
+    lastSendMap.set(ip, now);
+
     const data = await request.json();
 
     const message = `

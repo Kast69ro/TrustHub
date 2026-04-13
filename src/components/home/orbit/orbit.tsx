@@ -55,7 +55,7 @@ export default function Orbit() {
             <div className="pt-2">
               <Link href='add-form'>
               <button
-              className="group inline-flex items-center gap-3 bg-gray-800 text-white px-8 py-4 rounded-lg text-lg font-medium transition-all duration-300 hover:bg-gray-700 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-gray-800/20 shadow-md"
+              className="group inline-flex items-center gap-3 bg-[#000] text-white px-8 py-4 rounded-lg text-lg font-medium transition-all duration-300 hover:bg-gray-700 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-gray-800/20 shadow-md"
               aria-label="Add your site to our trusted network"
               >
                 <PlusIcon className="w-5 h-5 transition-transform group-hover:scale-110" />

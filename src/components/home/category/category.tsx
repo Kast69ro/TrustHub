@@ -1,3 +1,4 @@
+'use client'
 import {
   CodeBracketIcon,
   PaintBrushIcon,
@@ -9,41 +10,60 @@ import {
 import Link from "next/link";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { getTranslations } from "next-intl/server";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/components/shared/hooks/app-dispatch/app-dispatch";
+import { getCatalog } from "@/entities/api/catalog/catalog";
+import { useTranslations } from "next-intl";
 
-export async function CategoriesSection() {
-  const t = await getTranslations("HomePage");
+export  function CategoriesSection() {
+  const t =  useTranslations("HomePage");
+
+  const resources = useAppSelector((state) => state.catalog.catalog);
+  const dispatch = useAppDispatch()
+
+  const developCount = resources.filter(r => r.category === "Development").length;
+  const designCount = resources.filter(r => r.category === "Design").length;
+  const educationCount = resources.filter(r => r.category === "Education").length;
+  const technologyCount = resources.filter(r => r.category === "Technology").length;
+  const securityCount = resources.filter(r => r.category === "Security").length;
+
+  
+
+  useEffect(() => {
+    dispatch(getCatalog())
+   
+  }, []);
 
   const categories = [
     {
       name: t("category-1"),
       icon: CodeBracketIcon,
-      count: 124,
+      count: developCount,
       color: "bg-blue-300",
     },
     {
       name: t("category-2"),
       icon: PaintBrushIcon,
-      count: 89,
+      count: designCount,
       color: "bg-purple-300",
     },
     {
       name: t("category-3"),
       icon: AcademicCapIcon,
-      count: 156,
+      count: educationCount,
       color: "bg-green-300",
     },
     {
       name: t("category-4"),
       icon: BoltIcon,
-      count: 203,
+      count: technologyCount,
       color: "bg-yellow-300",
     },
-    { name: t("category-5"), icon: UsersIcon, count: 67, color: "bg-pink-300" },
+    { name: t("category-5"), icon: UsersIcon, count: developCount, color: "bg-pink-300" },
     {
       name: t("category-6"),
       icon: ShieldCheckIcon,
-      count: 45,
+      count: securityCount,
       color: "bg-red-300",
     },
   ];

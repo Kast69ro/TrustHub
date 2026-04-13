@@ -19,7 +19,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "TrustHub – Discover Trusted Resources",
-  description: "Curated and verified tools, platforms, and services for professionals.",
+  description:
+    "Curated and verified tools, platforms, and services for professionals.",
   icons: {
     icon: [
       { url: "/logo.png", type: "image/png", sizes: "any" },
@@ -52,26 +53,30 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
-  children,
-  params,
-}: {
+export default async function RootLayout(props: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  // Загрузим переводы для текущего языка
-  const messages = (await import(`../../../message/${params.locale}.json`)).default;
+  // ✅ Ждем params
+  const { locale } = await props.params;
+
+  // ✅ Грузим переводы для конкретного языка
+  const messages = (await import(`../../../message/${locale}.json`)).default;
 
   return (
-    <html lang={params.locale}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <NextIntlClientProvider locale={params.locale} messages={messages}>
-        <Navigation />
-        <ReduxProvider>
-            {children}
-            <Toaster position="bottom-right" richColors />
-        </ReduxProvider>
-          </NextIntlClientProvider>
+    <html lang={locale}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <div className="mx-auto w-full max-w-[1920px] ">
+            <Navigation />
+            <ReduxProvider>
+              {props.children}
+              <Toaster position="bottom-right" richColors />
+            </ReduxProvider>
+          </div>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

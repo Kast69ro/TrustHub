@@ -40,7 +40,7 @@ export default async function HomePage() {
 
   return (
     <div className="bg-[#f1eadb] min-h-screen w-full overflow-x-hidden">
-      <section className="py-10 px-4 sm:px-6 lg:px-8 border-b border-[#d7c4a3] max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+      <section className="py-10 px-4 sm:px-6 lg:px-8 border-b border-[#d7c4a3] max-w-7xl mx-auto  flex flex-col md:flex-row justify-between items-center gap-10">
         <div className="w-full flex flex-col items-center md:items-start text-center md:text-left space-y-7">
           <h1 className="font-serif text-4xl sm:text-5xl md:text-[65px] font-semibold text-black leading-tight">
             {t("title")}
